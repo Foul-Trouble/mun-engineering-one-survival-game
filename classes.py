@@ -28,6 +28,9 @@ class Enemy:
     def __init__(self):
         None
 
+    def create_enemy(self):
+        None
+
     def place_enemy(self):
         # Adrian
         None
@@ -52,6 +55,7 @@ class Grades:
 
     def __init__(self):
         None
+
 
 class Platform:
 
