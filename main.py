@@ -9,10 +9,11 @@ import functions
 import loads
 from constants import *
 
+# Testing Stuff
 if __name__ == "__main__":
     None
 
-
+# Main Loop !!!DO NOT TOUCH!!!
 while True:
     None
 
