@@ -41,7 +41,7 @@ def init():
 
 
 def close():
-    None
+    exit()
 
 
 def loop():
