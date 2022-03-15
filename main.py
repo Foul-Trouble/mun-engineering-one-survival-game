@@ -11,33 +11,39 @@ def init():
     pygame.display.set_caption('ENGI Survival')
     screen = pygame.display.set_mode((1000, 720), 0, 32)
     clock = pygame.time.Clock()
-    try:
-        digital_read(6)
-        arduino = True
-    except Exception:
-        print("Arduino not detected")
-        arduino = False
+    if not arduino_test:
+        try:
+            digital_read(6)
+            arduino = True
+        except Exception:
+            print("Arduino not detected")
+            arduino = False
     student = Character()
     teacher = Enemy()
     coin_summon = Coins()
     grade_summon = Grades()
-    time_since_enter = pygame.time.get_ticks() - start_time
+    mixer.music.play(-1)
     while True:
+        time_since_enter = pygame.time.get_ticks() - start_time
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
 
-        if time_since_enter >= 8080:
+        if time_since_enter >= 5750:
+            screen.fill(color=(0, 0, 0))
             break
         if arduino:
             if digital_read(6):
                 break
         logo_approach = time_since_enter / 5
+        screen.fill(color=(0, 0, 0))
         if time_since_enter <= 4040:
-            screen.blit(pygame.transform.scale(logo, (logo_approach, logo_approach / 2)), (96, 135))
+            screen.blit(pygame.transform.scale(mun_logo, (logo_approach, logo_approach / 2)), (96, 135))
         else:
-            screen.blit(pygame.transform.scale(logo, (808, 404)), (96, 135))
+            screen.blit(pygame.transform.scale(mun_logo, (808, 404)), (96, 135))
+        pygame.display.update()
+        clock.tick(60)
 
 
 def close():
