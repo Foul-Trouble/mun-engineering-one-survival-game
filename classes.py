@@ -4,7 +4,9 @@ from loads import *
 
 class Player:
     def __init__(self):
-        None
+        self.coins = [None, None]
+        self.aura = None
+        self.avatar_choice = None
 
 
 class Character:
@@ -13,7 +15,7 @@ class Character:
     def __init__(self):
         self.characters = []
         self.position = [[None, None], None, None]
-        self.hitbox = [5, 5]
+        self.hitbox = [25, 25]
 
     def place_character(self):
         for avatar in self.characters:

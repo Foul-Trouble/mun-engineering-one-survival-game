@@ -1,6 +1,6 @@
 # This is the functions file
 
-def coin_notification(coin_count, location, ability_status):
+def coin_notification(coin_count, ability_status):
     None
     # Find the coin count and ability and take that and figure out if the sound should go or the light should turn on
 
