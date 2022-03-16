@@ -7,19 +7,13 @@ def coin_notification(coin_count, ability_status, time_interval):
     coin_count = 0
     for i in coin_count[0, 6]:
         coin_count += 1
-
         if coin_count == 5:
             ability_status = True
             digital_write(4, True)
-
         else:
             ability_status = False
             coin_notification(coin_count, ability_status, 0.5)
             digital_write(4, True)
-
-
-
-
 
 
 def total_score(coins, abilities_used, enemies_defeated, boss_time, total_time):
@@ -39,6 +33,7 @@ def total_score(coins, abilities_used, enemies_defeated, boss_time, total_time):
 
 
 if __name__ == '__main__':
+  None
 
 
 
