@@ -3,7 +3,6 @@ from loads import *
 
 
 def coin_notification(coin_count, ability_status, time_interval):
-    None
     # Find the coin count and ability and take that and figure out if the sound should go or the light should turn on
     coin_count = 0
     for i in coin_count[0, 6]:
@@ -23,28 +22,23 @@ def coin_notification(coin_count, ability_status, time_interval):
 
 
 
-def total_score(coins, abilities_used, enemys_defeated, boss_time, total_time):
-    None
+def total_score(coins, abilities_used, enemies_defeated, boss_time, total_time):
     # Calculate the total score of the run
-    inital_score = []
-    total_coins = coins
-    total_abilities = abilities_used
-    total_enemys = enemys_defeated
-    total_boss = boss_time
-    final_time = total_time
+    initial_score = []
     coins_value = 50
-    abilities_value = 100
-    enemys_value = 200
-    boss_value = 400
-    total_value = 600
-    inital_score.append(coins*coins_value)
-    inital_score.append(abilities_used)
-    inital_score.append(enemys_defeated)
-    inital_score.append(boss_time)
-    inital_score.append(total_time)
-    sum(inital_score)
+    abilities_value = 400
+    enemies_value = 200
+    boss_value = (1000 - (boss_time/50))
+    total_value = (1000 - (total_time/50))
+    initial_score.append(coins*coins_value)
+    initial_score.append(abilities_used*abilities_value)
+    initial_score.append(enemies_defeated*enemies_value)
+    initial_score.append(boss_time*boss_value)
+    initial_score.append(total_time*total_value)
+    return sum(inital_score)
 
 
+if __name__ == '__main__':
 
 
 
