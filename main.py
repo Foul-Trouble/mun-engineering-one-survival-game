@@ -23,10 +23,12 @@ if __name__ == "__main__":
 
 # Main Loop !!!DO NOT TOUCH, RUSSELL ONLY!!!
 def init():
-    global arduino, clock, screen, start_game, start_time
+    global arduino, clock, screen, start_game, start_time, player, world
     pygame.display.set_caption('ENGI Survival')
     screen = pygame.display.set_mode((1000, 720), 0, 32)
     clock = pygame.time.Clock()
+    player = Player(100, 720-130)
+    world = World(level_one)
     while not start_game:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -89,6 +91,7 @@ def main_game():
         # Outside Engineering Building Level
         world = World(level_one)
         world.draw(screen)
+        # screen.blit(pygame.transform.scale(adrian1, (168, 384)), (50, 366))
     elif time_since_enter < 18850:
         screen.fill(color=(255, 0, 0))
     elif time_since_enter < 33850:
@@ -109,6 +112,7 @@ def loop():
             pygame.quit()
             sys.exit()
     main_game()
+    player.update(world, screen)
     pygame.display.update()
     clock.tick(60)
 
