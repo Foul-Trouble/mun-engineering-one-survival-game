@@ -88,7 +88,7 @@ def main_game():
     if time_since_enter < 11300:
         # Outside Engineering Building Level
         world = World(level_one)
-        world.draw()
+        world.draw(screen)
     elif time_since_enter < 18850:
         screen.fill(color=(255, 0, 0))
     elif time_since_enter < 33850:
