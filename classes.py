@@ -1,7 +1,6 @@
 # Classes file
 import random
 import pygame
-from constants import screen
 
 
 class Player:
@@ -12,6 +11,7 @@ class Player:
 
 
 class World:
+
     def __init__(self, data):
         self.tile_list = []
 
@@ -39,8 +39,7 @@ class World:
                 col_count += 1
             row_count += 1
 
-    def draw(self):
-        global screen
+    def draw(self, screen):
         for tile in self.tile_list:
             screen.blit(tile[0], tile[1])
 
