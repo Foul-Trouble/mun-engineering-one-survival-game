@@ -1,8 +1,15 @@
+# Visual Studio Code
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/settings.json
+
+# JetBrains
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
-.idea/**/dictionaries.xml
-.idea/**/shelf.xml
+.idea/**/dictionaries
+.idea/**/shelf
 .idea/**/contentModel.xml
 .idea/**/dataSources/
 .idea/**/dataSources.ids
