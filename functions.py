@@ -1,9 +1,8 @@
 # This is the functions file
-from loads import *
 
-
-def coin_notification(coin_count, ability_status, time_interval):
+def coin_notification(coin_count, ability_status):
     # Find the coin count and ability and take that and figure out if the sound should go or the light should turn on
+
     coin_count = 0
     time_interval = 0.5
     ability_status = ""
@@ -16,11 +15,10 @@ def coin_notification(coin_count, ability_status, time_interval):
             ability_status = False
             coin_notification(coin_count, ability_status, time_interval)
             digital_write(4, True)
+    return coin_notification()
 
-        return coin_notification()
 
-
-def total_score(coins, abilities_used, enemies_defeated, boss_time, total_time):
+def total_score(coins, abilities_used, enemys_defeated, boss_time, total_time):
     # Calculate the total score of the run
     initial_score = []
     coins_value = 50
@@ -38,17 +36,4 @@ def total_score(coins, abilities_used, enemies_defeated, boss_time, total_time):
 
 if __name__ == '__main__':
   None
-
-
-
-
-
-
-
-
-
-
-
-
-
 
