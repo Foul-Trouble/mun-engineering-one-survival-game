@@ -1,5 +1,7 @@
 # Classes file
-from loads import *
+import random
+import pygame
+from constants import screen
 
 
 class Player:
@@ -7,6 +9,40 @@ class Player:
         self.coins = [None, None]
         self.aura = None
         self.avatar_choice = None
+
+
+class World:
+    def __init__(self, data):
+        self.tile_list = []
+
+        # load images
+        floor_img = pygame.image.load('assets/Floor.jpg')
+
+        row_count = 0
+        for row in data:
+            col_count = 0
+            for tile in row:
+                if tile == 1:
+                    img = pygame.transform.scale(floor_img, (20, 20))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * 20
+                    img_rect.y = row_count * 20
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                # if tile == 2:
+                #     img = pygame.transform.scale(grass_img, (tile_size, tile_size))
+                #     img_rect = img.get_rect()
+                #     img_rect.x = col_count * tile_size
+                #     img_rect.y = row_count * tile_size
+                #     tile = (img, img_rect)
+                #     self.tile_list.append(tile)
+                col_count += 1
+            row_count += 1
+
+    def draw(self):
+        global screen
+        for tile in self.tile_list:
+            screen.blit(tile[0], tile[1])
 
 
 class Character:
@@ -19,7 +55,7 @@ class Character:
 
     def place_character(self):
         for avatar in self.characters:
-            screen.blit(None)
+            screen.blit(avatar)
 
     def move_character(self, x, y, direction, size=1):
         self.position = [[x, y], direction, size]
@@ -68,8 +104,8 @@ class Coins:
                 screen.blit(pygame.transform.scale(coin, (coin[2], coin[2])), (coin[0]))
 
     def add_bubbles(self, a, b, dir_t, x_spot, y_spot):
-        pos_x = random.randint(a-30, a+30) + x_spot
-        pos_y = random.randint(b-15, b+15) + y_spot
+        pos_x = random.randint(a - 30, a + 30) + x_spot
+        pos_y = random.randint(b - 15, b + 15) + y_spot
         direction = dir_t
         coin_size = random.randint(20, 60)
         coin_circle = [[pos_x, pos_y], direction, coin_size]
