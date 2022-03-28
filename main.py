@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
 
 def init():
-    global arduino, clock, screen, start_game, start_time, player, teacher, world
+    global arduino, clock, screen, start_game, start_time, player, teacher, world, character_chosen
     pygame.display.set_caption('ENGI Survival')
     screen = pygame.display.set_mode((1000, 720), 0, 32)
     clock = pygame.time.Clock()
@@ -140,8 +140,8 @@ def loop():
             pygame.quit()
             sys.exit()
     main_game()
-    player.update(world, screen)
-    teacher.update(world, screen)
+    player.update(world, screen, character_chosen)
+
     pygame.display.update()
     clock.tick(60)
 

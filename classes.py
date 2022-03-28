@@ -7,9 +7,15 @@ class Player:
     def __init__(self, x, y, character_chosen, re_hit=0):
         self.images_right = []
         self.images_left = []
+        self.images_jump = []
         self.index = 0
         self.counter = 0
         # Create the animation of the player moving left and right
+        img_jump = pygame.image.load(f'assets/{character_chosen}/{character_chosen} 1.jpeg')
+        img_jump = pygame.transform.scale(img_jump, (768, 336))
+        img_jump_l = pygame.transform.flip(img_jump, True, False)
+        self.images_jump.append(img_jump)
+        self.images_jump.append(img_jump_l)
         for num in range(2, 6):
             img_right = pygame.image.load(f'assets/{character_chosen}/{character_chosen} {num}.jpeg')
             img_right = pygame.transform.scale(img_right, (768, 336))
@@ -36,7 +42,7 @@ class Player:
         self.control_method = 'keyboard'
         self.ctl_index = 0
 
-    def update(self, world, screen):
+    def update(self, world, screen, character_chosen):
         # Find the position of the player
         dx = 0
         dy = 0
@@ -137,6 +143,13 @@ class Player:
                     dy = tile[1].top - self.hit_box.bottom
                     self.vel_y = 0
 
+
+
+
+
+
+
+
         if self.hit_box.left < -50:
             dx = 0
         if self.hit_box.right > 1050:
@@ -152,6 +165,12 @@ class Player:
         if self.rect.bottom > 720:
             self.rect.bottom = 720
             dy = 0
+
+        if dy > 0:
+            if self.direction == 1:
+                self.image = self.images_jump[0]
+            elif self.direction == -1:
+                self.image = self.images_jump[1]
 
         # draw player onto screen
         screen.blit(self.image, self.rect)
