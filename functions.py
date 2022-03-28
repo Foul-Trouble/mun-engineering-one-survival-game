@@ -2,22 +2,16 @@
 from loads import *
 
 
-def coin_notification(coin_count, ability_status, time_interval):
+def coin_notification(coin_count, ability_status,oled_print):
     # Find the coin count and ability and take that and figure out if the sound should go or the light should turn on
-    coin_count = 0
-    time_interval = 0.5
-    ability_status = ""
-    for i in coin_count[0, 6]:
-        coin_count += 1
-        if coin_count == 5:
-            ability_status = True
-            digital_write(4, True)
-        else:
-            ability_status = False
-            coin_notification(coin_count, ability_status, time_interval)
-            digital_write(4, True)
 
-        return coin_notification()
+
+    if coin_count == 5:
+        oled_print("Ability status ready!")
+    else:
+        oled_print("Ability status not ready", coin_count)
+
+
 
 
 def total_score(coins, abilities_used, enemies_defeated, boss_time, total_time):
@@ -36,8 +30,7 @@ def total_score(coins, abilities_used, enemies_defeated, boss_time, total_time):
     return sum(initial_score)
 
 
-if __name__ == '__main__':
-  None
+
 
 
 
