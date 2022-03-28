@@ -27,15 +27,19 @@ def init():
     screen = pygame.display.set_mode((1000, 720), 0, 32)
     clock = pygame.time.Clock()
     character_chosen = '_____'
+    character_hit_loc = 0
     while not start_game:
         for event in pygame.event.get():
             key = pygame.key.get_pressed()
             if key[pygame.K_r]:
                 character_chosen = 'Russell'
+                character_hit_loc = -20
             elif key[pygame.K_m]:
                 character_chosen = 'McKenna'
+                character_hit_loc = 0
             elif key[pygame.K_z]:
                 character_chosen = 'Zach'
+                character_hit_loc = -100
             elif key[pygame.K_j]:
                 character_chosen = 'Jenna'
             elif key[pygame.K_a]:
@@ -45,8 +49,9 @@ def init():
                 pygame.quit()
                 sys.exit()
             elif event.type == MOUSEBUTTONUP:
-                start_time = pygame.time.get_ticks()
-                start_game = True
+                if not character_chosen == '_____':
+                    start_time = pygame.time.get_ticks()
+                    start_game = True
         screen.fill(color=(0, 0, 0))
         font = pygame.font.Font('freesansbold.ttf', 32)
         continue_text = font.render('Click Anywhere to Continue', True, (255, 255, 255))
@@ -63,7 +68,7 @@ def init():
         screen.blit(question_text, textRect)
 
         pygame.display.update()
-    player = Player(-300, 590, character_chosen)
+    player = Player(-300, 590, character_chosen, character_hit_loc)
     world = World(blank_level)
     if not arduino_test:
         try:

@@ -4,7 +4,7 @@ import pygame
 
 
 class Player:
-    def __init__(self, x, y, character_chosen):
+    def __init__(self, x, y, character_chosen, re_hit=0):
         self.images_right = []
         self.images_left = []
         self.index = 0
@@ -27,7 +27,7 @@ class Player:
         self.jumped = False
         self.direction = 0
         self.hit_box = self.image.get_rect()
-        self.hit_box.x = x + 325
+        self.hit_box.x = x + 325 + re_hit
         self.hit_box.y = y - 234
         self.hit_box.width = 150
         self.hit_box.height = 300
@@ -155,7 +155,8 @@ class Player:
 
         # draw player onto screen
         screen.blit(self.image, self.rect)
-        pygame.draw.rect(screen, (255, 255, 255), self.hit_box, 2)
+        if key[pygame.K_h]:
+            pygame.draw.rect(screen, (255, 255, 255), self.hit_box, 2)
 
 
 class World:
