@@ -38,6 +38,8 @@ def init():
                 character_chosen = 'Zach'
             elif key[pygame.K_j]:
                 character_chosen = 'Jenna'
+            elif key[pygame.K_a]:
+                character_chosen = 'Adrian'
 
             if event.type == QUIT:
                 pygame.quit()
