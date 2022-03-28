@@ -21,9 +21,8 @@ if __name__ == "__main__":
     None
 
 
-# Main Loop !!!DO NOT TOUCH, RUSSELL ONLY!!!
 def init():
-    global arduino, clock, screen, start_game, start_time, player, world
+    global arduino, clock, screen, start_game, start_time, player, teacher, world
     pygame.display.set_caption('ENGI Survival')
     screen = pygame.display.set_mode((1000, 720), 0, 32)
     clock = pygame.time.Clock()
@@ -71,7 +70,7 @@ def init():
         except Exception:
             print("Arduino not detected")
             arduino = False
-    #teacher = Enemy()
+    teacher = Enemy(400, 590)
     coin_summon = Coins()
     grade_summon = Grades()
     mixer.music.play(-1)
@@ -135,6 +134,7 @@ def loop():
             sys.exit()
     main_game()
     player.update(world, screen)
+    teacher.update(world, screen)
     pygame.display.update()
     clock.tick(60)
 

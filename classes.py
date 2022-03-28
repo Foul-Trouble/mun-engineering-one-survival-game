@@ -224,6 +224,8 @@ class Enemy:
         walk_cooldown = 5
 
         # AI here
+        # Find The Nearest Player
+
 
         if self.counter > walk_cooldown:
             self.counter = 0
