@@ -1,5 +1,6 @@
 import pygame
 
+
 pygame.mixer.init()
 pygame.font.init()
 # logos
@@ -18,3 +19,5 @@ startup_sound = pygame.mixer.Sound('assets/NINTENDO Mii THEME (TRAP REMIX) - VAN
 # Sprites
 
 adrian1 = pygame.image.load('assets/Adrian/Adrian 1.jpeg')
+
+wordle_background = pygame.image.load('mini_games/minigameassets/wordle picture.png')
