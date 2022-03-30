@@ -1,6 +1,9 @@
 # Classes file
 import random
 import pygame
+from loads import newfoundland_coin
+from constants import coin_score, mini_game_called
+from functions import mini_message
 
 
 class Player:
@@ -284,29 +287,48 @@ class Enemy:
 
 class Coins:
 
-    def __init__(self):
+    def __init__(self, coin):
         self.coins = []
+        self.image = coin
+        self.rect = self.image.get_rect()
 
-    def emit(self, screen):
-        self.delete_coins()
+    def emit(self, screen, player):
+        mini_game_called = self.check(player)
         if self.coins:
             for coin in self.coins:
-                rand_coin = random.randint(-10, 10)
-                coin[0][1] += coin[1]
-                coin[0][0] += rand_coin
-                screen.blit(pygame.transform.scale(coin, (coin[2], coin[2])), (coin[0]))
+                screen.blit(pygame.transform.scale(self.image, (80, 80)), (coin[0]))
+        return mini_game_called
 
-    def add_bubbles(self, a, b, dir_t, x_spot, y_spot):
-        pos_x = random.randint(a - 30, a + 30) + x_spot
-        pos_y = random.randint(b - 15, b + 15) + y_spot
-        direction = dir_t
-        coin_size = random.randint(20, 60)
-        coin_circle = [[pos_x, pos_y], direction, coin_size]
+    def add_coins(self, x_spot, y_spot):
+        coin_circle = [[x_spot, y_spot], 20]
         self.coins.append(coin_circle)
 
-    def delete_coins(self):
-        coin_copy = [coin for coin in self.coins if 0 < coin[0][1] < 720]
+    def check(self, player):
+        global coin_score, mini_game_called
+        coin_copy = []
+        for coin in self.coins:
+            coin_img = pygame.transform.scale(newfoundland_coin, (80, 80))
+            coin_rect = coin_img.get_rect()
+            coin_rect.x = coin[0][0]
+            coin_rect.y = coin[0][1]
+
+            if not coin_rect.colliderect(player.hit_box.x, player.hit_box.y, player.hit_box.width,
+                                         player.hit_box.height):
+                coin_copy.append(coin)
+            else:
+                coin_score += 1
+                mini_game_called = True
+
         self.coins = coin_copy
+        return mini_game_called
+
+
+        # img = pygame.transform.scale(floor_img, (20, 20))
+        # img_rect = img.get_rect()
+        # img_rect.x = col_count * 20
+        # img_rect.y = row_count * 20
+        # tile = (img, img_rect)
+        # self.tile_list.append(tile)
 
 
 class Grades:

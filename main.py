@@ -7,6 +7,7 @@ import numpy
 import os
 import sys
 import random
+import time
 
 from functions import *
 from constants import *
@@ -14,6 +15,8 @@ from classes import *
 from main_game_mechanics import *
 from loads import *
 from levels import *
+
+import mini_games
 
 from assets import *
 
@@ -23,7 +26,7 @@ if __name__ == "__main__":
 
 
 def init():
-    global arduino, clock, screen, start_game, start_time, player, teacher, world, character_chosen
+    global arduino, clock, screen, start_game, start_time, player, teacher, world, character_chosen, coin_count
     pygame.display.set_caption('ENGI Survival')
     screen = pygame.display.set_mode((1000, 720), 0, 32)
     clock = pygame.time.Clock()
@@ -71,6 +74,7 @@ def init():
         pygame.display.update()
     player = Player(-300, 590, character_chosen, character_hit_loc)
     world = World(blank_level)
+    coin_count = Coins(newfoundland_coin)
     if not arduino_test:
         try:
             digital_read(6)
@@ -79,7 +83,6 @@ def init():
             print("Arduino not detected")
             arduino = False
     teacher = Enemy(400, 590)
-    coin_summon = Coins()
     grade_summon = Grades()
     mixer.music.play(-1)
     while True:
@@ -105,20 +108,58 @@ def init():
         clock.tick(60)
 
 
+def mini_game_check():
+    global mini_game_called
+    if mini_game_called:
+        mixer.music.pause()
+        mini_game_choice = random.randint(1, 5)
+        flash = 2
+        while flash > 0:
+            screen.fill('black')
+            pygame.display.update()
+            time.sleep(0.1)
+            screen.fill('white')
+            pygame.display.update()
+            time.sleep(0.1)
+            flash -= 1
+
+        if mini_game_choice == 1:
+            mini_games.cipher.run()
+        elif mini_game_choice == 2:
+            mini_games.math.run()
+        elif mini_game_choice == 3:
+            mini_games.physics.run()
+        elif mini_game_choice == 4:
+            mini_games.wordle.run()
+        elif mini_game_choice == 5:
+            mini_games.work_term.run()
+        else:
+            None
+        mixer.music.play()
+        mini_game_called = False
+
+
 def main_game():
     # Load Screen - 0 to 11300
     # Outside - 11300 to 18850
     # 3 - 18850 to 33850
     # 4 - 33850 to 48850
     # 5 - 48850 to ?
-    global world
+    global world, world_init, mini_game_called
     time_since_enter = pygame.time.get_ticks() - start_time
     screen.blit(pygame.transform.scale(current_background, (1000, 720)), (0, 0))
     if time_since_enter < 11300:
         # Outside Engineering Building Level
+        if world_init == 0:
+            world_init = 1
+            coins = [(400, 100)]
+            for coin in coins:
+                coin_count.add_coins(coin[0], coin[1])
         world = World(blank_level)
         world.draw(screen)
-        # screen.blit(pygame.transform.scale(adrian1, (168, 384)), (50, 366))
+        mini_game_called = coin_count.emit(screen, player)
+        print(mini_game_called)
+
     elif time_since_enter < 18850:
         screen.fill(color=(255, 0, 0))
         world = World(level_one)
@@ -148,6 +189,7 @@ def loop():
             sys.exit()
     main_game()
     player.update(world, screen)
+    mini_game_check()
 
     pygame.display.update()
     clock.tick(60)

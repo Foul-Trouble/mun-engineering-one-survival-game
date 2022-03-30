@@ -16,5 +16,4 @@ startup_sound = pygame.mixer.Sound('assets/NINTENDO Mii THEME (TRAP REMIX) - VAN
 
 
 # Sprites
-
-adrian1 = pygame.image.load('assets/Adrian/Adrian 1.jpeg')
+newfoundland_coin = pygame.image.load('assets/Newfoundland Coin.png')

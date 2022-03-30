@@ -2,7 +2,7 @@
 from loads import *
 
 from engi1020.arduino.api import *
-
+from constants import mini_game_called
 
 
 def coin_notification(coin_count, ability_status, time_interval):
@@ -23,7 +23,6 @@ def coin_notification(coin_count, ability_status, time_interval):
         return coin_notification()
 
 
-
 def total_score(coins, abilities_used, enemies_defeated, boss_time, total_time):
     # Calculate the total score of the run
     initial_score = []
@@ -41,4 +40,9 @@ def total_score(coins, abilities_used, enemies_defeated, boss_time, total_time):
 
 
 if __name__ == '__main__':
-  None
+    None
+
+
+def mini_message():
+    global mini_game_called
+    mini_game_called = True
