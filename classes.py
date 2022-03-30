@@ -1,7 +1,7 @@
 # Classes file
 import random
 import pygame
-from loads import newfoundland_coin
+from loads import newfoundland_coin, fail_img
 from constants import coin_score, mini_game_called
 from functions import mini_message
 
@@ -293,11 +293,10 @@ class Coins:
         self.rect = self.image.get_rect()
 
     def emit(self, screen, player):
-        mini_game_called = self.check(player)
+        self.check(player)
         if self.coins:
             for coin in self.coins:
                 screen.blit(pygame.transform.scale(self.image, (80, 80)), (coin[0]))
-        return mini_game_called
 
     def add_coins(self, x_spot, y_spot):
         coin_circle = [[x_spot, y_spot], 20]
@@ -317,24 +316,56 @@ class Coins:
                 coin_copy.append(coin)
             else:
                 coin_score += 1
-                mini_game_called = True
 
         self.coins = coin_copy
-        return mini_game_called
-
-
-        # img = pygame.transform.scale(floor_img, (20, 20))
-        # img_rect = img.get_rect()
-        # img_rect.x = col_count * 20
-        # img_rect.y = row_count * 20
-        # tile = (img, img_rect)
-        # self.tile_list.append(tile)
 
 
 class Grades:
 
     def __init__(self):
         self.grades = []
+
+    def emit(self, screen, player):
+        mini_game_called = self.delete_grades(player)
+        for grade in self.grades:
+            if not 0 < grade[0][0] < 875:
+                grade[1][0] = -grade[1][0]
+                grade[2] += 1
+            if not 0 < grade[0][1] < 645:
+                grade[1][1] = -grade[1][1]
+                grade[2] += 1
+            grade[0][0] += grade[1][0]
+            grade[0][1] += grade[1][1]
+
+            screen.blit(pygame.transform.scale(fail_img, (125, 75)), (grade[0]))
+        return mini_game_called
+
+    def add_grades(self, x, y, sx, sy):
+        pos_x = x
+        pos_y = y
+        spd_x = sx
+        spd_y = sy
+        bounce = 0
+        grade_loc = [[pos_x, pos_y], [spd_x, spd_y], bounce]
+        self.grades.append(grade_loc)
+
+    def delete_grades(self, player):
+        global mini_game_called
+        grades_copy1 = []
+        grades_copy = [grad for grad in self.grades if grad[2] < 6]
+        for grade in grades_copy:
+            grade_rect = pygame.transform.scale(fail_img, (125, 75)).get_rect()
+            grade_rect.x = grade[0][0]
+            grade_rect.y = grade[0][1]
+
+            if not grade_rect.colliderect(player.hit_box.x, player.hit_box.y, player.hit_box.width,
+                                          player.hit_box.height):
+                grades_copy1.append(grade)
+            else:
+                mini_game_called = True
+        self.grades = grades_copy1
+        return mini_game_called
+
 
 
 class Platform:

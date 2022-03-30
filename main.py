@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
 
 def init():
-    global arduino, clock, screen, start_game, start_time, player, teacher, world, character_chosen, coin_count
+    global arduino, clock, screen, start_game, start_time, player, teacher, world, character_chosen, coin_count, grade_count
     pygame.display.set_caption('ENGI Survival')
     screen = pygame.display.set_mode((1000, 720), 0, 32)
     clock = pygame.time.Clock()
@@ -75,6 +75,7 @@ def init():
     player = Player(-300, 590, character_chosen, character_hit_loc)
     world = World(blank_level)
     coin_count = Coins(newfoundland_coin)
+    grade_count = Grades()
     if not arduino_test:
         try:
             digital_read(6)
@@ -155,10 +156,11 @@ def main_game():
             coins = [(400, 100)]
             for coin in coins:
                 coin_count.add_coins(coin[0], coin[1])
+            grade_count.add_grades(200, 200, 5, 5)
         world = World(blank_level)
         world.draw(screen)
-        mini_game_called = coin_count.emit(screen, player)
-        print(mini_game_called)
+        coin_count.emit(screen, player)
+        mini_game_called = grade_count.emit(screen, player)
 
     elif time_since_enter < 18850:
         screen.fill(color=(255, 0, 0))
