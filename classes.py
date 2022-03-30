@@ -42,7 +42,7 @@ class Player:
         self.control_method = 'keyboard'
         self.ctl_index = 0
 
-    def update(self, world, screen, character_chosen):
+    def update(self, world, screen):
         # Find the position of the player
         dx = 0
         dy = 0
@@ -143,13 +143,6 @@ class Player:
                     dy = tile[1].top - self.hit_box.bottom
                     self.vel_y = 0
 
-
-
-
-
-
-
-
         if self.hit_box.left < -50:
             dx = 0
         if self.hit_box.right > 1050:
@@ -166,7 +159,7 @@ class Player:
             self.rect.bottom = 720
             dy = 0
 
-        if dy > 0:
+        if dy > 14:
             if self.direction == 1:
                 self.image = self.images_jump[0]
             elif self.direction == -1:
@@ -246,7 +239,6 @@ class Enemy:
         # AI here
         # Find The Nearest Player
 
-
         if self.counter > walk_cooldown:
             self.counter = 0
             self.index += 1
@@ -285,7 +277,6 @@ class Enemy:
 
         if self.rect.bottom > 720:
             self.rect.bottom = 720
-            dy = 0
 
         # draw enemy onto screen
         screen.blit(self.image, self.rect)

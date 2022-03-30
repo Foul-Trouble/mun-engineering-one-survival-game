@@ -13,6 +13,7 @@ from constants import *
 from classes import *
 from main_game_mechanics import *
 from loads import *
+from levels import *
 
 from assets import *
 
@@ -124,10 +125,16 @@ def main_game():
         world.draw(screen)
     elif time_since_enter < 33850:
         screen.fill(color=(0, 255, 0))
+        world = World(level_two)
+        world.draw(screen)
     elif time_since_enter < 48850:
         screen.fill(color=(255, 0, 0))
+        world = World(level_three)
+        world.draw(screen)
     else:
         screen.fill(color=(0, 0, 0))
+        world = World(level_four)
+        world.draw(screen)
 
 
 def close():
@@ -140,7 +147,7 @@ def loop():
             pygame.quit()
             sys.exit()
     main_game()
-    player.update(world, screen, character_chosen)
+    player.update(world, screen)
 
     pygame.display.update()
     clock.tick(60)
