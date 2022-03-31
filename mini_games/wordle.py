@@ -13,14 +13,14 @@ black = (0, 0, 0)
 green = (0, 255, 0)
 yellow = (255, 255, 0)
 gray = (128, 128, 128)
-blue = (0, 122, 58)
+blue = (0, 0, 255)
 
-board = [[" ", " ", " ", " ", " "],
-         [" ", " ", " ", " ", " "],
-         [" ", " ", " ", " ", " "],
-         [" ", " ", " ", " ", " "],
-         [" ", " ", " ", " ", " "],
-         [" ", " ", " ", " ", " "]]
+board = [[None, None, None, None, None],
+         [None, None, None, None, None],
+         [None, None, None, None, None],
+         [None, None, None, None, None],
+         [None, None, None, None, None],
+         [None, None, None, None, None]]
 
 clicked = False
 counter = 0
@@ -28,17 +28,23 @@ counter = 0
 screen_width = 1000
 screen_height = 720
 turn = 0
-font = pygame.font.SysFont('Constantia', 30)
+font = pygame.font.SysFont('Times New Roman', 30)
 
 
 def draw_board():
-    global turn
+    global turn, piece_text
     global board
     for col in range(0, 5):
         for row in range(0, 6):
-            pygame.draw.rect(screen, black, [col * 70 + 320, row * 65 + 40, 50, 50], 3, 2)
-            piece_text = font.render(board[row][col], True, gray)
-            screen.blit(piece_text, (col * 100 + 30, row * 100 + 25))
+            if board[row][col] is None:
+                pygame.draw.rect(screen, black, [col * 70 + 320, row * 65 + 40, 50, 50], 3, 2)
+            elif board[row][col] == green:
+                pygame.draw.rect(screen, green, [col * 70 + 320, row * 65 + 40, 50, 50], 8, 2)
+            elif board[row][col] == yellow:
+                pygame.draw.rect(screen, yellow, [col * 70 + 320, row * 65 + 40, 50, 50], 8, 2)
+            elif board[row][col] == gray:
+                pygame.draw.rect(screen, gray, [col * 70 + 320, row * 65 + 40, 50, 50], 8, 2)
+            # screen.blit(piece_text, (col * 100 + 30, row * 100 + 25))
 
 
 class Button():
@@ -114,29 +120,29 @@ class Guesses():
         text_len = text_img.get_width()
         screen.blit(text_img, (self.x + int(self.width / 2) - int(text_len / 2), self.y + 15))
 
-
-def checkGuess(turn, word, userGuess, window):
-    renderList = ["", "", "", "", ""]
-    spacing = 0
-    guessColourCode = [gray, gray, gray, gray, gray]
-
-    for x in range(0, 5):
-        if userGuess[x] in word:
-            guessColourCode[x] = yellow
-
-        if word[x] == userGuess[x]:
-            guessColourCode[x] = green
-
-    list(userGuess)
-
-    for x in range(0, 5):
-        renderList[x] = font.render(userGuess[x], True, black)
-        pygame.draw.rect(window, guessColourCode[x], pygame.Rect(60 + spacing, 50 + (turn * 80), 50, 50))
-        window.blit(renderList[x], (70 + spacing, 50 + (turns * 80)))
-        spacing += 80
-
-    if guessColourCode == [green, green, green, green, green]:
-        return True
+#
+# def checkGuess(turn, word, userGuess, window):
+#     renderList = ["", "", "", "", ""]
+#     spacing = 0
+#     guessColourCode = [gray, gray, gray, gray, gray]
+#
+#     for x in range(0, 5):
+#         if userGuess[x] in word:
+#             guessColourCode[x] = yellow
+#
+#         if word[x] == userGuess[x]:
+#             guessColourCode[x] = green
+#
+#     list(userGuess)
+#
+#     for x in range(0, 5):
+#         renderList[x] = font.render(userGuess[x], True, black)
+#         pygame.draw.rect(window, guessColourCode[x], pygame.Rect(60 + spacing, 50 + (turn * 80), 50, 50))
+#         window.blit(renderList[x], (70 + spacing, 50 + (turns * 80)))
+#         spacing += 80
+#
+#     if guessColourCode == [green, green, green, green, green]:
+#         return True
 
 
 Q = Button(200, 450, 'Q', 50, 50)
@@ -273,59 +279,55 @@ def keyboard_look(guess_number):
             try:
                 letter = Guesses(i * 70 + 320, guess_number * 65 + 40)
                 letter.draw_guess_square(guess[i])
-                print(guess[0])
+
 
             except:
                 None
-        for x, i in enumerate(answer):
-            for y, n in enumerate(i):
-                letter = Guesses(y * 70 + 320, x * 65 + 40)
+        for z, w in enumerate(answer):
+            for y, n in enumerate(w):
+                letter = Guesses(y * 70 + 320, z * 65 + 40)
                 letter.draw_guess_square(n)
 
 
-answer = []
-for i in range(6):
-    answer.append(keyboard_look(i))
+# answer = []
+# for i in range(6):
+#     answer.append(keyboard_look(i))
+#
+# pygame.quit()
 
-pygame.quit()
-
-white = '⬜'
-yellow = '🟨'
-green = '🟩'
+# white = '⬜'
+# yellow = '🟨'
+# green = '🟩'
 game_amount = 0
 while True:
-    results = [None, None, None, None, None, None]
     turns = 0
-    word = input("Input a five-letter word: ")
+    answer = []
+    word = 'SKEET'
     if word == '':
         quit()
     if len(word) != 5:
         print(f'"{word} is not a five-letter word."')
     else:
         while turns < 6:
-            colour = [white, white, white, white, white]
-            guess = keyboard_look()
-            turns += 1
+            guess = keyboard_look(turns)
+            answer.append(guess)
+
             if len(guess) != 5:
                 print(f'"{guess} is not a five-letter word."')
-                colour = '⬜⬜⬜⬜⬜'
             else:
                 for x in range(0, 5):
                     if guess[x] == word[x]:
-                        colour[x] = green
+                        board[turns][x] = green
                     elif guess[x] in word:
-                        colour[x] = yellow
+                        board[turns][x] = yellow
                     else:
-                        colour[x] = white
-                colour = colour[0] + colour[1] + colour[2] + colour[3] + colour[4]
-            results[turns - 1] = colour
-            print(colour)
+                        board[turns][x] = gray
+            print(board)
             if word == guess:
                 break
+            turns += 1
         if word != guess:
             turns = 'X'
         game_amount += 1
         print(f' "Wordle {game_amount} {turns}/6".')
-        for i in results:
-            if i is not None:
-                print(i)
+        print(answer)
