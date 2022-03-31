@@ -110,8 +110,9 @@ def init():
 
 
 def mini_game_check():
-    global mini_game_called
+    global mini_game_called, mini_game_time
     if mini_game_called:
+        mini_game_start = pygame.time.get_ticks()
         mixer.music.pause()
         mini_game_choice = random.randint(1, 5)
         flash = 2
@@ -123,21 +124,24 @@ def mini_game_check():
             pygame.display.update()
             time.sleep(0.1)
             flash -= 1
-
-        if mini_game_choice == 1:
-            mini_games.cipher.run()
-        elif mini_game_choice == 2:
-            mini_games.math.run()
-        elif mini_game_choice == 3:
-            mini_games.physics.run()
-        elif mini_game_choice == 4:
-            mini_games.wordle.run()
-        elif mini_game_choice == 5:
-            mini_games.work_term.run()
-        else:
-            None
-        mixer.music.play()
+        try:
+            if mini_game_choice == 1:
+                mini_games.cipher.run()
+            elif mini_game_choice == 2:
+                mini_games.math.run()
+            elif mini_game_choice == 3:
+                mini_games.physics.run()
+            elif mini_game_choice == 4:
+                mini_games.wordle.run()
+            elif mini_game_choice == 5:
+                mini_games.work_term.run()
+            else:
+                None
+        except:
+            time.sleep(5)
+        mixer.music.unpause()
         mini_game_called = False
+        mini_game_time += (pygame.time.get_ticks() - mini_game_start)
 
 
 def main_game():
@@ -146,38 +150,45 @@ def main_game():
     # 3 - 18850 to 33850
     # 4 - 33850 to 48850
     # 5 - 48850 to ?
-    global world, world_init, mini_game_called
-    time_since_enter = pygame.time.get_ticks() - start_time
+    global world, world_init, mini_game_called, mini_game_time, current_background
+    time_since_enter = pygame.time.get_ticks() - start_time - mini_game_time
     screen.blit(pygame.transform.scale(current_background, (1000, 720)), (0, 0))
+
     if time_since_enter < 11300:
         # Outside Engineering Building Level
         if world_init == 0:
+            world = World(blank_level)
             world_init = 1
             coins = [(400, 100)]
             for coin in coins:
                 coin_count.add_coins(coin[0], coin[1])
             grade_count.add_grades(200, 200, 5, 5)
-        world = World(blank_level)
-        world.draw(screen)
-        coin_count.emit(screen, player)
-        mini_game_called = grade_count.emit(screen, player)
 
     elif time_since_enter < 18850:
-        screen.fill(color=(255, 0, 0))
-        world = World(level_one)
-        world.draw(screen)
+        if world_init == 1:
+            world_init = 2
+            world = World(level_one)
+            current_background = bruneau
+
     elif time_since_enter < 33850:
-        screen.fill(color=(0, 255, 0))
-        world = World(level_two)
-        world.draw(screen)
+        if world_init == 2:
+            world_init = 3
+            world = World(level_two)
+            current_background = chem_lab
+
     elif time_since_enter < 48850:
-        screen.fill(color=(255, 0, 0))
-        world = World(level_three)
-        world.draw(screen)
+        if world_init == 3:
+            world_init = 4
+            world = World(level_three)
+            current_background = old_sci_hall
+
     else:
         screen.fill(color=(0, 0, 0))
         world = World(level_four)
-        world.draw(screen)
+
+    world.draw(screen)
+    coin_count.emit(screen, player)
+    mini_game_called = grade_count.emit(screen, player, mini_game_called)
 
 
 def close():

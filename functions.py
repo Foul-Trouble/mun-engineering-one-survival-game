@@ -43,6 +43,3 @@ if __name__ == '__main__':
     None
 
 
-def mini_message():
-    global mini_game_called
-    mini_game_called = True

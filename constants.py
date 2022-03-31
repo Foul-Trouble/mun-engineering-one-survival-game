@@ -10,3 +10,4 @@ start_game = False
 world_init = 0
 coin_score = 0
 mini_game_called = False
+mini_game_time = 0

@@ -3,10 +3,11 @@ import random
 import pygame
 from loads import newfoundland_coin, fail_img
 from constants import coin_score, mini_game_called
-from functions import mini_message
 
 
 class Player:
+    # Initialising the player.
+    # This handles all the setup of the player including all the class variables, positions, and sizes.
     def __init__(self, x, y, character_chosen, re_hit=0):
         self.images_right = []
         self.images_left = []
@@ -45,8 +46,11 @@ class Player:
         self.control_method = 'keyboard'
         self.ctl_index = 0
 
+    # This handles the movement of the player as well as the players collisions with boundaries
+    # This does not handle the collisions with objects
     def update(self, world, screen):
         # Find the position of the player
+        # dx and dy are the amount of movement the player will have in this frame
         dx = 0
         dy = 0
         walk_cooldown = 9
@@ -112,7 +116,7 @@ class Player:
         # Using the Arduino to play
 
         # handle animation
-        # every 5 ticks the image will change so that the sprite appears moving
+        # every 9 ticks the image will change so that the sprite appears moving
         if self.counter > walk_cooldown:
             self.counter = 0
             self.index += 1
@@ -319,14 +323,17 @@ class Coins:
 
         self.coins = coin_copy
 
+    def reset(self):
+        self.coins = []
+
 
 class Grades:
 
     def __init__(self):
         self.grades = []
 
-    def emit(self, screen, player):
-        mini_game_called = self.delete_grades(player)
+    def emit(self, screen, player, mini_game_called):
+        mini_game_called = self.delete_grades(player, mini_game_called)
         for grade in self.grades:
             if not 0 < grade[0][0] < 875:
                 grade[1][0] = -grade[1][0]
@@ -349,23 +356,25 @@ class Grades:
         grade_loc = [[pos_x, pos_y], [spd_x, spd_y], bounce]
         self.grades.append(grade_loc)
 
-    def delete_grades(self, player):
-        global mini_game_called
+    def delete_grades(self, player, mini_game_called):
         grades_copy1 = []
         grades_copy = [grad for grad in self.grades if grad[2] < 6]
-        for grade in grades_copy:
-            grade_rect = pygame.transform.scale(fail_img, (125, 75)).get_rect()
-            grade_rect.x = grade[0][0]
-            grade_rect.y = grade[0][1]
+        if grades_copy:
+            for grade in grades_copy:
+                grade_rect = pygame.transform.scale(fail_img, (125, 75)).get_rect()
+                grade_rect.x = grade[0][0]
+                grade_rect.y = grade[0][1]
 
-            if not grade_rect.colliderect(player.hit_box.x, player.hit_box.y, player.hit_box.width,
-                                          player.hit_box.height):
-                grades_copy1.append(grade)
-            else:
-                mini_game_called = True
+                if grade_rect.colliderect(player.hit_box.x, player.hit_box.y, player.hit_box.width,player.hit_box.height):
+                    mini_game_called = True
+                else:
+                    mini_game_called = False
+                    grades_copy1.append(grade)
+        else:
+            mini_game_called = False
+
         self.grades = grades_copy1
         return mini_game_called
-
 
 
 class Platform:
