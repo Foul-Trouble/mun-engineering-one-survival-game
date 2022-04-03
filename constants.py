@@ -11,8 +11,9 @@ world_init = 0
 coin_score = 0
 mini_game_called = False
 mini_game_time = 0
+mini_points = 0
 
 from win32api import GetSystemMetrics
 window = GetSystemMetrics(1) / 1.33
-window = 900
+window = 720
 world_size = (window * 1000 / 720, window)

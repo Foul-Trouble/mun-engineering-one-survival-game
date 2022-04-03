@@ -15,6 +15,7 @@ from classes import *
 from main_game_mechanics import *
 from loads import *
 from levels import *
+from mini_games import wordle
 
 import mini_games
 
@@ -102,9 +103,11 @@ def init():
         logo_approach = time_since_enter / 5
         screen.fill(color=(0, 0, 0))
         if time_since_enter <= 4040:
-            screen.blit(pygame.transform.scale(mun_logo, (logo_approach, logo_approach / 2)), (world_size[0] / 10.41, world_size[1] / 5.33))
+            screen.blit(pygame.transform.scale(mun_logo, (logo_approach, logo_approach / 2)),
+                        (world_size[0] / 10.41, world_size[1] / 5.33))
         else:
-            screen.blit(pygame.transform.scale(mun_logo, (world_size[0] / 1.24, world_size[1] / 1.78)), (world_size[0] / 10.41, world_size[1] / 5.33))
+            screen.blit(pygame.transform.scale(mun_logo, (world_size[0] / 1.24, world_size[1] / 1.78)),
+                        (world_size[0] / 10.41, world_size[1] / 5.33))
         pygame.display.update()
         clock.tick(60)
 
@@ -114,6 +117,7 @@ def mini_game_check():
     if mini_game_called:
         mini_game_start = pygame.time.get_ticks()
         mixer.music.pause()
+        startup_sound.play()
         mini_game_choice = random.randint(1, 5)
         flash = 2
         while flash > 0:
@@ -124,41 +128,39 @@ def mini_game_check():
             pygame.display.update()
             time.sleep(0.1)
             flash -= 1
-        try:
-            if mini_game_choice == 1:
-                mini_games.cipher.run()
-            elif mini_game_choice == 2:
-                mini_games.math.run()
-            elif mini_game_choice == 3:
-                mini_games.physics.run()
-            elif mini_game_choice == 4:
-                mini_games.wordle.run()
-            elif mini_game_choice == 5:
-                mini_games.work_term.run()
-            else:
-                None
-        except:
-            time.sleep(5)
+
+        result, score = wordle.run(world_size, screen)
+        # if mini_game_choice == 1:
+        #     mini_games.cipher.run()
+        # elif mini_game_choice == 2:
+        #     mini_games.math.run()
+        # elif mini_game_choice == 3:
+        #     mini_games.physics.run()
+        # elif mini_game_choice == 4:
+        #     mini_games.wordle.run(world_size)
+        # elif mini_game_choice == 5:
+        #     mini_games.work_term.run()
+        # else:
+        #     None
+        startup_sound.stop()
         mixer.music.unpause()
         mini_game_called = False
         mini_game_time += (pygame.time.get_ticks() - mini_game_start)
+        return result, score
+    return True, 0
 
 
 def main_game():
-    # Load Screen - 0 to 11300
-    # Outside - 11300 to 18850
-    # 3 - 18850 to 33850
-    # 4 - 33850 to 48850
-    # 5 - 48850 to ?
     global world, world_init, mini_game_called, mini_game_time, current_background
     time_since_enter = pygame.time.get_ticks() - start_time - mini_game_time
     screen.blit(pygame.transform.scale(current_background, world_size), (0, 0))
 
     if time_since_enter < 11300:
-        # Outside Engineering Building Level
         if world_init == 0:
-            world = World(level_one)
             world_init = 1
+            world = World(level_one)
+            current_background = outside_engineering
+
             coins = [(400, 100)]
             for coin in coins:
                 coin_count.add_coins(coin[0], coin[1])
@@ -170,11 +172,22 @@ def main_game():
             world = World(level_two)
             current_background = bruneau
 
+            coin_count.reset()
+            grade_count.reset()
+            coins = [(700, 100)]
+            for coin in coins:
+                coin_count.add_coins(coin[0], coin[1])
+            grade_count.add_grades(200, 200, 5, 5)
+            grade_count.add_grades(800, 200, -5, 5)
+
     elif time_since_enter < 33850:
         if world_init == 2:
             world_init = 3
             world = World(level_three)
             current_background = chem_lab
+
+            coin_count.reset()
+            grade_count.reset()
 
     elif time_since_enter < 48850:
         if world_init == 3:
@@ -182,28 +195,29 @@ def main_game():
             world = World(level_four)
             current_background = old_sci_hall
 
+            coin_count.reset()
+            grade_count.reset()
+
     else:
         screen.fill(color=(0, 0, 0))
-        world = World(blank_level)
 
     world.draw(screen)
     coin_count.emit(screen, player)
     mini_game_called = grade_count.emit(screen, player, mini_game_called)
 
 
-def close():
-    exit()
-
-
 def loop():
+    global mini_points
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
     main_game()
     player.update(world, screen)
-    mini_game_check()
-
+    result, score = mini_game_check()
+    if not result:
+        sys.exit()
+    mini_points += score
     pygame.display.update()
     clock.tick(60)
 
@@ -213,5 +227,4 @@ while game:
     loop()
 
 # Exit Stuff
-close()
 exit()

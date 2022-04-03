@@ -371,13 +371,14 @@ class Grades:
                 if grade_rect.colliderect(player.hit_box.x, player.hit_box.y, player.hit_box.width,player.hit_box.height):
                     mini_game_called = True
                 else:
-                    mini_game_called = False
                     grades_copy1.append(grade)
         else:
             mini_game_called = False
-
         self.grades = grades_copy1
         return mini_game_called
+
+    def reset(self):
+        self.grades = []
 
 
 class Platform:
