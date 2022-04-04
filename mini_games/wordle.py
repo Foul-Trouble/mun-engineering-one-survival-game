@@ -321,6 +321,5 @@ def run(world_size, screen):
     else:
         return False, turns
 
-
 if __name__ == '__main__':
     print(run(world_size, screen))
