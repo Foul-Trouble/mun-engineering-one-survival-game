@@ -276,9 +276,13 @@ def boss_battle():
     boss_battle_time = pygame.time.get_ticks() - start_time
     screen.blit(pygame.transform.scale(eo_center, world_size), (0, 0))
 
+    world.draw(screen)
+
 
 def loop():
     global mini_points
+    condition = True
+    status = True
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
@@ -287,15 +291,27 @@ def loop():
     player.update(world, screen)
     result, score = mini_game_check()
     if not result:
-        sys.exit()
+        condition = False
+        status = False
     mini_points += score
     pygame.display.update()
     clock.tick(60)
+    return status, condition
+
 
 
 init()
 while game:
-    loop()
+    game, status = loop()
+
+if status:
+    boss_battle()
+else:
+    mixer.music.pause()
+    lose_sound.play()
+    time.sleep(5)
+
+
 
 # Exit Stuff
 exit()
