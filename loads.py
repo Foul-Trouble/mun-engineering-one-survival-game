@@ -7,11 +7,12 @@ mun_logo = pygame.image.load('assets/MUN Logo.png')
 
 # backgrounds
 outside_engineering = pygame.image.load('assets/backgrounds/MUN Engineering Building Outside.jpg')
+engineering_lobby = pygame.image.load('assets/backgrounds/engineering_lobby.jpg')
 bruneau = pygame.image.load('assets/backgrounds/Bruneau Center Inside.jpg')
 chem_lab = pygame.image.load('assets/backgrounds/Chemistry Lab.jpg')
 old_sci_hall = pygame.image.load('assets/backgrounds/Old Science Lecture Hall.jpg')
 outside_university_center = pygame.image.load('assets/backgrounds/outside_university_center.jpg')
-eo_center = None
+eo_center = pygame.image.load('assets/backgrounds/eo_success.jpg')
 
 current_background = outside_engineering
 

@@ -12,6 +12,7 @@ coin_score = 0
 mini_game_called = False
 mini_game_time = 0
 mini_points = 0
+sd = 3
 
 # from win32api import GetSystemMetrics
 # window = GetSystemMetrics(1) / 1.33

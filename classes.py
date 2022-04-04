@@ -3,7 +3,7 @@ import random
 import pygame
 from loads import newfoundland_coin, fail_img
 from constants import coin_score, mini_game_called
-from constants import world_size
+from constants import world_size, sd
 
 
 class Player:
@@ -247,13 +247,28 @@ class Enemy:
         self.jumped = False
         self.direction = 0
 
-    def update(self, world, screen):
-
+    def update(self, world, screen, player_hitbox, difficulty):
+        global sd
         dx = 0
         dy = 0
         walk_cooldown = 5
 
         # AI here
+        if difficulty == 1:
+            print(self.rect.x)
+            if self.rect.x > 720:
+                sd *= -1
+                print(sd)
+            if self.rect.x < 0:
+                sd *= -1
+            dx = sd
+        elif difficulty == 2:
+            dx = 4
+            dy = 3
+        elif difficulty == 3:
+            print(player_hitbox)
+
+
         # Find The Nearest Player
 
         if self.counter > walk_cooldown:

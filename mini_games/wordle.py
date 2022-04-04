@@ -292,7 +292,7 @@ def run(world_size, screen):
 
     while turns < 6:
         guess = keyboard_look(turns)
-        answer.append(guess)
+        answer.append(guesssss)
         letter_check = word[:]
         for x in range(5):
             if guess[x] == word[x]:

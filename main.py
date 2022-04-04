@@ -73,6 +73,7 @@ def init():
 
         pygame.display.update()
     player = Player(-world_size[0] / 3.3, world_size[1] / 1.22, character_chosen, character_hit_loc)
+    teacher = Enemy(650, -200)
     world = World(blank_level)
     coin_count = Coins(newfoundland_coin)
     grade_count = Grades()
@@ -279,6 +280,8 @@ def boss_battle():
 
     world.draw(screen)
 
+    return status, condition
+
 
 def loop():
     global mini_points
@@ -304,12 +307,35 @@ def loop():
 
 
 init()
-while game:
-    game, status = loop()
+# while game:
+#     game, status = loop()
+condition = True
+status = True
+if status and condition:
+    mixer.music.pause()
+    boss_music.play()
+    boss_start_time = pygame.time.get_ticks()
+    while status and condition:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+        status, condition = boss_battle()
+        player.update(world, screen)
+        if boss_start_time > pygame.time.get_ticks() - 10000:
+            difficulty = 1
+        elif boss_start_time > pygame.time.get_ticks() - 25000:
+            difficulty = 2
+        elif boss_start_time > pygame.time.get_ticks() - 50000:
+            difficulty = 3
+        teacher.update(world, screen, player.hit_box, difficulty)
+        if boss_start_time < pygame.time.get_ticks() - 50000:
+            print('You Win!')
+            break
 
-if status:
-    boss_battle()
-else:
+        pygame.display.update()
+        clock.tick(60)
+if not status:
     mixer.music.pause()
     lose_sound.play()
     time.sleep(5)
