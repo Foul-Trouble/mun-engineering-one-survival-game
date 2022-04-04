@@ -150,7 +150,7 @@ def mini_game_check():
 
 
 def main_game():
-    global world, world_init, mini_game_called, mini_game_time, current_background
+    global world, world_init, mini_game_called, mini_game_time, current_background, levels
     time_since_enter = pygame.time.get_ticks() - start_time - mini_game_time
     screen.blit(pygame.transform.scale(current_background, world_size), (0, 0))
 
@@ -208,9 +208,10 @@ def main_game():
 
     elif time_since_enter < 60000:
         if world_init == 4:
+            print('level five')
             world_init = 5
-            world = World(level_four)
-            current_background = old_sci_hall
+            world = World(level_five)
+            current_background = outside_university_center
 
             coin_count.reset()
             grade_count.reset()
@@ -218,6 +219,49 @@ def main_game():
             for coin in level_five_coins:
                 coin_count.add_coins(coin[0], coin[1])
             for grade in level_five_grades:
+                grade_count.add_grades(grade[0], grade[1], grade[2], grade[3])
+
+    elif time_since_enter < 71200:
+        if world_init == 5:
+            print('level six')
+            world_init = 6
+            world = World(level_six)
+            current_background = outside_engineering
+
+            coin_count.reset()
+            grade_count.reset()
+
+            for coin in level_six_coins:
+                coin_count.add_coins(coin[0], coin[1])
+            for grade in level_six_grades:
+                grade_count.add_grades(grade[0], grade[1], grade[2], grade[3])
+    elif time_since_enter < 86200:
+        if world_init == 6:
+            world_init = 7
+            world = World(level_seven)
+            current_background = outside_university_center
+
+            coin_count.reset()
+            grade_count.reset()
+
+            for coin in level_seven_coins:
+                coin_count.add_coins(coin[0], coin[1])
+            for grade in level_seven_grades:
+                grade_count.add_grades(grade[0], grade[1], grade[2], grade[3])
+
+    elif time_since_enter < 101400:
+        if world_init == 7:
+            print('level eight')
+            world_init = 8
+            world = World(level_eight)
+            current_background = outside_engineering
+
+            coin_count.reset()
+            grade_count.reset()
+
+            for coin in level_eight_coins:
+                coin_count.add_coins(coin[0], coin[1])
+            for grade in level_eight_grades:
                 grade_count.add_grades(grade[0], grade[1], grade[2], grade[3])
 
 
