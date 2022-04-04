@@ -17,7 +17,10 @@ current_background = outside_engineering
 
 # music and sounds
 pygame.mixer.music.load('assets/sounds/Wii Sports Resort (Remix).wav')
+pygame.mixer.music.set_volume(0.25)
 startup_sound = pygame.mixer.Sound('assets/sounds/NINTENDO Mii THEME (TRAP REMIX) - VANDER.wav')
+lose_sound = pygame.mixer.Sound('assets/sounds/GTA Lose.wav')
+boss_music = pygame.mixer.Sound('assets/sounds/Swordplay Showdown - Wii Sports Resort OST.wav')
 
 
 # Sprites
