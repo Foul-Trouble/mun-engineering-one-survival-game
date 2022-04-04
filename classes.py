@@ -1,18 +1,29 @@
 # Classes file
 import random
 import pygame
+from loads import newfoundland_coin, fail_img
+from constants import coin_score, mini_game_called
+from constants import world_size, sd
 
 
 class Player:
-    def __init__(self, x, y, character_chosen):
+    # Initialising the player.
+    # This handles all the setup of the player including all the class variables, positions, and sizes.
+    def __init__(self, x, y, character_chosen, re_hit=0):
         self.images_right = []
         self.images_left = []
+        self.images_jump = []
         self.index = 0
         self.counter = 0
         # Create the animation of the player moving left and right
+        img_jump = pygame.image.load(f'assets/{character_chosen}/{character_chosen} 1.jpeg')
+        img_jump = pygame.transform.scale(img_jump, (world_size[0] / 1.3, world_size[1] / 2.15))
+        img_jump_l = pygame.transform.flip(img_jump, True, False)
+        self.images_jump.append(img_jump)
+        self.images_jump.append(img_jump_l)
         for num in range(2, 6):
             img_right = pygame.image.load(f'assets/{character_chosen}/{character_chosen} {num}.jpeg')
-            img_right = pygame.transform.scale(img_right, (768, 336))
+            img_right = pygame.transform.scale(img_right, (world_size[0] / 1.3, world_size[1] / 2.15))
             img_left = pygame.transform.flip(img_right, True, False)
             self.images_right.append(img_right)
             self.images_left.append(img_left)
@@ -27,17 +38,20 @@ class Player:
         self.jumped = False
         self.direction = 0
         self.hit_box = self.image.get_rect()
-        self.hit_box.x = x + 325
-        self.hit_box.y = y - 234
-        self.hit_box.width = 150
-        self.hit_box.height = 300
+        self.hit_box.x = x + (world_size[0] / 3.08) + re_hit
+        self.hit_box.y = y - (world_size[1] / 3.08)
+        self.hit_box.width = world_size[0] / 6.66
+        self.hit_box.height = world_size[1] / 2.4
         self.walking_direction = 0
         self.last_walking_direction = 1
         self.control_method = 'keyboard'
         self.ctl_index = 0
 
+    # This handles the movement of the player as well as the players collisions with boundaries
+    # This does not handle the collisions with objects
     def update(self, world, screen):
         # Find the position of the player
+        # dx and dy are the amount of movement the player will have in this frame
         dx = 0
         dy = 0
         walk_cooldown = 9
@@ -103,7 +117,7 @@ class Player:
         # Using the Arduino to play
 
         # handle animation
-        # every 5 ticks the image will change so that the sprite appears moving
+        # every 9 ticks the image will change so that the sprite appears moving
         if self.counter > walk_cooldown:
             self.counter = 0
             self.index += 1
@@ -137,9 +151,9 @@ class Player:
                     dy = tile[1].top - self.hit_box.bottom
                     self.vel_y = 0
 
-        if self.hit_box.left < -50:
+        if self.hit_box.left < -world_size[0] / 20:
             dx = 0
-        if self.hit_box.right > 1050:
+        if self.hit_box.right > world_size[0] + world_size[0] / 20:
             dx = 0
 
         # update player coordinates
@@ -149,41 +163,57 @@ class Player:
         self.hit_box.x += dx
         self.hit_box.y += dy
 
-        if self.rect.bottom > 720:
-            self.rect.bottom = 720
+        if self.rect.bottom > world_size[1]:
+            self.rect.bottom = world_size[1]
             dy = 0
+
+        if dy > 14:
+            if self.direction == 1:
+                self.image = self.images_jump[0]
+            elif self.direction == -1:
+                self.image = self.images_jump[1]
 
         # draw player onto screen
         screen.blit(self.image, self.rect)
-        pygame.draw.rect(screen, (255, 255, 255), self.hit_box, 2)
+        if key[pygame.K_h]:
+            pygame.draw.rect(screen, (255, 255, 255), self.hit_box, 2)
 
 
 class World:
 
     def __init__(self, data):
         self.tile_list = []
+        tile_size = world_size[0] / 50
 
         # load images
         floor_img = pygame.image.load('assets/Floor.jpg')
+        pavement_img = pygame.image.load('assets/Pavement.jpeg')
 
         row_count = 0
         for row in data:
             col_count = 0
             for tile in row:
                 if tile == 1:
-                    img = pygame.transform.scale(floor_img, (20, 20))
+                    img = pygame.transform.scale(floor_img, (tile_size, tile_size))
                     img_rect = img.get_rect()
-                    img_rect.x = col_count * 20
-                    img_rect.y = row_count * 20
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
-                # if tile == 2:
-                #     img = pygame.transform.scale(grass_img, (tile_size, tile_size))
-                #     img_rect = img.get_rect()
-                #     img_rect.x = col_count * tile_size
-                #     img_rect.y = row_count * tile_size
-                #     tile = (img, img_rect)
-                #     self.tile_list.append(tile)
+                if tile == 2:
+                    img = pygame.transform.scale(pavement_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                if tile == 3:
+                    img = pygame.transform.scale(floor_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count * tile_size
+                    img_rect.y = row_count * tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
                 col_count += 1
             row_count += 1
 
@@ -202,7 +232,7 @@ class Enemy:
         # Create the animation of the player moving left and right
         for num in range(2, 4):
             img_right = pygame.image.load(f'assets/Adrian/Adrian {num}.jpeg')
-            img_right = pygame.transform.scale(img_right, (768, 336))
+            img_right = pygame.transform.scale(img_right, (world_size[0] / 1.3, world_size[1] / 2.15))
             img_left = pygame.transform.flip(img_right, True, False)
             self.images_right.append(img_right)
             self.images_left.append(img_left)
@@ -217,15 +247,29 @@ class Enemy:
         self.jumped = False
         self.direction = 0
 
-    def update(self, world, screen):
-
+    def update(self, world, screen, player_hitbox, difficulty):
+        global sd
         dx = 0
         dy = 0
         walk_cooldown = 5
 
         # AI here
-        # Find The Nearest Player
+        if difficulty == 1:
+            print(self.rect.x)
+            if self.rect.x > 720:
+                sd *= -1
+                print(sd)
+            if self.rect.x < 0:
+                sd *= -1
+            dx = sd
+        elif difficulty == 2:
+            dx = 4
+            dy = 3
+        elif difficulty == 3:
+            print(player_hitbox)
 
+
+        # Find The Nearest Player
 
         if self.counter > walk_cooldown:
             self.counter = 0
@@ -263,9 +307,8 @@ class Enemy:
         self.rect.x += dx
         self.rect.y += dy
 
-        if self.rect.bottom > 720:
-            self.rect.bottom = 720
-            dy = 0
+        if self.rect.bottom > world_size[1]:
+            self.rect.bottom = world_size[1]
 
         # draw enemy onto screen
         screen.blit(self.image, self.rect)
@@ -273,34 +316,90 @@ class Enemy:
 
 class Coins:
 
-    def __init__(self):
+    def __init__(self, coin):
         self.coins = []
+        self.image = coin
+        self.rect = self.image.get_rect()
 
-    def emit(self, screen):
-        self.delete_coins()
+    def emit(self, screen, player):
+        self.check(player)
         if self.coins:
             for coin in self.coins:
-                rand_coin = random.randint(-10, 10)
-                coin[0][1] += coin[1]
-                coin[0][0] += rand_coin
-                screen.blit(pygame.transform.scale(coin, (coin[2], coin[2])), (coin[0]))
+                screen.blit(pygame.transform.scale(self.image, (world_size[0] / 12.5, world_size[0] / 12.5)), (coin[0]))
 
-    def add_bubbles(self, a, b, dir_t, x_spot, y_spot):
-        pos_x = random.randint(a - 30, a + 30) + x_spot
-        pos_y = random.randint(b - 15, b + 15) + y_spot
-        direction = dir_t
-        coin_size = random.randint(20, 60)
-        coin_circle = [[pos_x, pos_y], direction, coin_size]
+    def add_coins(self, x_spot, y_spot):
+        coin_circle = [[x_spot, y_spot], 20]
         self.coins.append(coin_circle)
 
-    def delete_coins(self):
-        coin_copy = [coin for coin in self.coins if 0 < coin[0][1] < 720]
+    def check(self, player):
+        global coin_score, mini_game_called
+        coin_copy = []
+        for coin in self.coins:
+            coin_img = pygame.transform.scale(newfoundland_coin, (world_size[0] / 12.5, world_size[0] / 12.5))
+            coin_rect = coin_img.get_rect()
+            coin_rect.x = coin[0][0]
+            coin_rect.y = coin[0][1]
+
+            if not coin_rect.colliderect(player.hit_box.x, player.hit_box.y, player.hit_box.width,
+                                         player.hit_box.height):
+                coin_copy.append(coin)
+            else:
+                coin_score += 1
+
         self.coins = coin_copy
+
+    def reset(self):
+        self.coins = []
 
 
 class Grades:
 
     def __init__(self):
+        self.grades = []
+
+    def emit(self, screen, player, mini_game_called):
+        mini_game_called = self.delete_grades(player, mini_game_called)
+        for grade in self.grades:
+            if not 0 < grade[0][0] < world_size[0] / 1.15:
+                grade[1][0] = -grade[1][0]
+                grade[2] += 1
+            if not 0 < grade[0][1] < world_size[1] / 1.11:
+                grade[1][1] = -grade[1][1]
+                grade[2] += 1
+            grade[0][0] += grade[1][0]
+            grade[0][1] += grade[1][1]
+
+            screen.blit(pygame.transform.scale(fail_img, (world_size[0] / 8, world_size[1] / 9.6)), (grade[0]))
+        return mini_game_called
+
+    def add_grades(self, x, y, sx, sy):
+        pos_x = x
+        pos_y = y
+        spd_x = sx
+        spd_y = sy
+        bounce = 0
+        grade_loc = [[pos_x, pos_y], [spd_x, spd_y], bounce]
+        self.grades.append(grade_loc)
+
+    def delete_grades(self, player, mini_game_called):
+        grades_copy1 = []
+        grades_copy = [grad for grad in self.grades if grad[2] < 6]
+        if grades_copy:
+            for grade in grades_copy:
+                grade_rect = pygame.transform.scale(fail_img, (world_size[0] / 8, world_size[1] / 9.6)).get_rect()
+                grade_rect.x = grade[0][0]
+                grade_rect.y = grade[0][1]
+
+                if grade_rect.colliderect(player.hit_box.x, player.hit_box.y, player.hit_box.width,player.hit_box.height):
+                    mini_game_called = True
+                else:
+                    grades_copy1.append(grade)
+        else:
+            mini_game_called = False
+        self.grades = grades_copy1
+        return mini_game_called
+
+    def reset(self):
         self.grades = []
 
 
