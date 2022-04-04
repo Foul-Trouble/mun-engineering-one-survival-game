@@ -12,7 +12,6 @@ import time
 from functions import *
 from constants import *
 from classes import *
-from main_game_mechanics import *
 from loads import *
 from levels import *
 from mini_games import wordle
@@ -204,6 +203,12 @@ def main_game():
     world.draw(screen)
     coin_count.emit(screen, player)
     mini_game_called = grade_count.emit(screen, player, mini_game_called)
+
+
+def boss_battle():
+    global start_time
+    boss_battle_time = pygame.time.get_ticks() - start_time
+    screen.blit(pygame.transform.scale(eo_center, world_size), (0, 0))
 
 
 def loop():
