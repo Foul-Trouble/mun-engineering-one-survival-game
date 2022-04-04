@@ -113,7 +113,8 @@ def init():
 
 def mini_game_check():
     global mini_game_called, mini_game_time
-    if mini_game_called:
+    key = pygame.key.get_pressed()
+    if mini_game_called and (not key[pygame.K_s]):
         mini_game_start = pygame.time.get_ticks()
         mixer.music.pause()
         startup_sound.play()
@@ -208,7 +209,6 @@ def main_game():
 
     elif time_since_enter < 60000:
         if world_init == 4:
-            print('level five')
             world_init = 5
             world = World(level_five)
             current_background = outside_university_center
@@ -223,7 +223,6 @@ def main_game():
 
     elif time_since_enter < 71200:
         if world_init == 5:
-            print('level six')
             world_init = 6
             world = World(level_six)
             current_background = outside_engineering
@@ -251,7 +250,6 @@ def main_game():
 
     elif time_since_enter < 101400:
         if world_init == 7:
-            print('level eight')
             world_init = 8
             world = World(level_eight)
             current_background = outside_engineering

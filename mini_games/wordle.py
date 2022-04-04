@@ -270,7 +270,6 @@ def run(world_size, screen):
                 screen.fill(color=(255, 255, 255))
             if len(guess) > 5:
                 guess.pop(-1)
-
             for i in range(5):
                 try:
                     letter = Guesses((i * 70 + 320) / 1000 * world_size[0],
@@ -295,7 +294,6 @@ def run(world_size, screen):
         guess = keyboard_look(turns)
         answer.append(guess)
         letter_check = word[:]
-
         for x in range(5):
             if guess[x] == word[x]:
                 board[turns][x] = green
@@ -307,7 +305,6 @@ def run(world_size, screen):
                     letter_check.remove(guess[x])
                 else:
                     board[turns][x] = gray
-
         if word == guess:
             break
         turns += 1
