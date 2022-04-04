@@ -310,6 +310,7 @@ while True:
     else:
         while turns < 6:
             guess = keyboard_look(turns)
+            print(guess)
             answer.append(guess)
 
             if len(guess) != 5:
