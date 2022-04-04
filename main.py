@@ -160,10 +160,10 @@ def main_game():
             world = World(level_one)
             current_background = outside_engineering
 
-            coins = [(400, 100)]
-            for coin in coins:
+            for coin in level_one_coins:
                 coin_count.add_coins(coin[0], coin[1])
-            grade_count.add_grades(200, 200, 5, 5)
+            for grade in level_one_grades:
+                grade_count.add_grades(grade[0], grade[1], grade[2], grade[3])
 
     elif time_since_enter < 18850:
         if world_init == 1:
@@ -173,11 +173,10 @@ def main_game():
 
             coin_count.reset()
             grade_count.reset()
-            coins = [(700, 100)]
-            for coin in coins:
+            for coin in level_two_coins:
                 coin_count.add_coins(coin[0], coin[1])
-            grade_count.add_grades(200, 200, 5, 5)
-            grade_count.add_grades(800, 200, -5, 5)
+            for grade in level_two_grades:
+                grade_count.add_grades(grade[0], grade[1], grade[2], grade[3])
 
     elif time_since_enter < 33850:
         if world_init == 2:
@@ -188,6 +187,11 @@ def main_game():
             coin_count.reset()
             grade_count.reset()
 
+            for coin in level_three_coins:
+                coin_count.add_coins(coin[0], coin[1])
+            for grade in level_three_grades:
+                grade_count.add_grades(grade[0], grade[1], grade[2], grade[3])
+
     elif time_since_enter < 48850:
         if world_init == 3:
             world_init = 4
@@ -196,6 +200,26 @@ def main_game():
 
             coin_count.reset()
             grade_count.reset()
+
+            for coin in level_four_coins:
+                coin_count.add_coins(coin[0], coin[1])
+            for grade in level_four_grades:
+                grade_count.add_grades(grade[0], grade[1], grade[2], grade[3])
+
+    elif time_since_enter < 60000:
+        if world_init == 4:
+            world_init = 5
+            world = World(level_four)
+            current_background = old_sci_hall
+
+            coin_count.reset()
+            grade_count.reset()
+
+            for coin in level_five_coins:
+                coin_count.add_coins(coin[0], coin[1])
+            for grade in level_five_grades:
+                grade_count.add_grades(grade[0], grade[1], grade[2], grade[3])
+
 
     else:
         screen.fill(color=(0, 0, 0))
