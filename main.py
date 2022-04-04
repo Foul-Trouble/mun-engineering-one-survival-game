@@ -269,6 +269,7 @@ def main_game():
     world.draw(screen)
     coin_count.emit(screen, player)
     mini_game_called = grade_count.emit(screen, player, mini_game_called)
+    return time_since_enter
 
 
 def boss_battle():
@@ -287,7 +288,7 @@ def loop():
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
-    main_game()
+    time_r = main_game()
     player.update(world, screen)
     result, score = mini_game_check()
     if not result:
@@ -296,6 +297,8 @@ def loop():
     mini_points += score
     pygame.display.update()
     clock.tick(60)
+    if time_r >= 101400:
+        status, condition = False, True
     return status, condition
 
 
