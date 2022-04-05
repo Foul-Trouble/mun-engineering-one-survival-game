@@ -121,6 +121,7 @@ def mini_game_check():
         mixer.music.pause()
         startup_sound.play()
         mini_game_choice = random.randint(1, 3)
+        # mini_game_choice = 3
         flash = 2
         while flash > 0:
             screen.fill('black')
@@ -303,6 +304,7 @@ def loop():
         status, condition = False, True
     return status, condition
 
+
 # init()
 # status, condition = True, True
 # boss_start_time = pygame.time.get_ticks()
@@ -327,7 +329,6 @@ def loop():
 #         print('You Win!')
 #     pygame.display.update()
 #     clock.tick(60)
-
 
 
 while True:
@@ -391,7 +392,7 @@ while True:
                              "Get some sleep",
                              "Fake ID's won't get you that far",
                              '"One more" was not a good idea'
-                    ]
+                             ]
                     font = pygame.font.Font('assets/pricedown bl.otf', 48)
                     if funny_made:
                         funny = jokes[random.randint(0, 4)]
@@ -406,9 +407,7 @@ while True:
                             previous_game_time += pygame.time.get_ticks()
                             break
 
-
             pygame.display.update()
-
 
 # Exit Stuff
 exit()

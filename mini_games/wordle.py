@@ -294,6 +294,7 @@ def run(world_size, screen):
         guess = keyboard_look(turns)
         answer.append(guess)
         letter_check = word[:]
+        print(word)
         for x in range(5):
             if guess[x] == word[x]:
                 board[turns][x] = green
