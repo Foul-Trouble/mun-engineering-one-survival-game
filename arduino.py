@@ -51,8 +51,6 @@ def lcd(val_1, val_2, val_3):
 # oled_print(f'Current points: {val_1}')
 # oled_print(f'Current time: {val_2}')
 # oled_print(f'Coins: {val_3}')
-
-lcd('Hi',"hi", 'Hello')
          
 
 # light(False)
