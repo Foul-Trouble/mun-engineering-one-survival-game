@@ -121,7 +121,7 @@ class Player:
                         self.hit_box.x += +25
         elif self.control_method == 'arduino':
             dx += dial()
-            print('Hello')
+
             if button():
                 self.vel_y = -15
         # Using the Arduino to play
@@ -275,7 +275,6 @@ class Enemy:
 
         # AI here
         if difficulty == 1:
-            print('Hello')
             # print(self.rect.x)
             if self.hit_box.right > 1000:
                 sdx *= -1
@@ -299,6 +298,30 @@ class Enemy:
                 self.counter2 = 0
         elif difficulty == 3:
             print(player_hitbox)
+            adrian = self.hit_box.x + self.width/2
+            player = player_hitbox.x + player_hitbox.width/2
+
+            adrian_y = self.hit_box.y
+            player_y = player_hitbox.y
+
+            if player > adrian:
+                sdx *= 5
+            elif player < adrian:
+                sdx = -5
+            else:
+                sdx = 0
+
+            if player_y > adrian_y:
+                if not self.jumped:
+                    self.vel_y = -20
+                    self.jumped = True
+                if self.counter2 > jump_cooldown:
+                    self.jumped = False
+                    self.counter2 = 0
+
+
+
+
 
         # Find The Nearest Player
 
@@ -351,7 +374,9 @@ class Enemy:
 
         # draw enemy onto screen
         screen.blit(self.image, self.rect)
-        pygame.draw.rect(screen, (255, 255, 255), self.hit_box, 2)
+        # pygame.draw.rect(screen, (255, 255, 255), self.hit_box, 2)
+
+        return loss
 
 
 class Coins:
