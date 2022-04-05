@@ -318,8 +318,10 @@ class Enemy:
                 if self.counter2 > jump_cooldown:
                     self.jumped = False
                     self.counter2 = 0
-
-
+        loss = False
+        if player_hitbox.colliderect(self.hit_box.x, self.hit_box.y, self.hit_box.width,
+                                  self.hit_box.height):
+            loss = True
 
 
 
