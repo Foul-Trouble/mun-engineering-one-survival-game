@@ -368,7 +368,7 @@ while True:
             pygame.display.update()
             clock.tick(60)
     print(status, condition)
-    if not status and condition:
+    if not status and not condition:
         print('Loss Start')
         loss_start = pygame.time.get_ticks()
         mixer.music.pause()
