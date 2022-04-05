@@ -14,6 +14,8 @@ mini_game_time = 0
 mini_points = 0
 sd = 3
 
+word_list = ['SKEET', 'SLEEP', 'BUILD', 'MATHS', 'CRAZY', 'EARTH', 'DIRTY', 'CIVIL', 'POWER', 'CABLE']
+
 # from win32api import GetSystemMetrics
 # window = GetSystemMetrics(1) / 1.33
 window = 720

@@ -14,7 +14,7 @@ from constants import *
 from classes import *
 from loads import *
 from levels import *
-from mini_games import wordle
+from mini_games import wordle, math_game, cipher
 
 import mini_games
 
@@ -119,7 +119,7 @@ def mini_game_check():
         mini_game_start = pygame.time.get_ticks()
         mixer.music.pause()
         startup_sound.play()
-        mini_game_choice = random.randint(1, 5)
+        mini_game_choice = 3
         flash = 2
         while flash > 0:
             screen.fill('black')
@@ -130,15 +130,14 @@ def mini_game_check():
             time.sleep(0.1)
             flash -= 1
 
-        result, score = wordle.run(world_size, screen)
-        # if mini_game_choice == 1:
-        #     mini_games.cipher.run()
-        # elif mini_game_choice == 2:
-        #     mini_games.math.run()
-        # elif mini_game_choice == 3:
-        #     mini_games.physics.run()
+        if mini_game_choice == 1:
+            result, score = wordle.run(world_size, screen)
+        elif mini_game_choice == 2:
+            result, score = math_game.run(world_size, screen)
+        elif mini_game_choice == 3:
+            result, score = cipher.run(world_size, screen)
         # elif mini_game_choice == 4:
-        #     mini_games.wordle.run(world_size)
+        #     result, score = mini_games.wordle.run(world_size, size)
         # elif mini_game_choice == 5:
         #     mini_games.work_term.run()
         # else:
@@ -277,7 +276,7 @@ def boss_battle():
     global start_time
     boss_battle_time = pygame.time.get_ticks() - start_time
     screen.blit(pygame.transform.scale(eo_center, world_size), (0, 0))
-
+    world = World(blank_level)
     world.draw(screen)
 
     return status, condition
@@ -305,10 +304,9 @@ def loop():
     return status, condition
 
 
-
 init()
-# while game:
-#     game, status = loop()
+while game:
+    game, status = loop()
 condition = True
 status = True
 if status and condition:
@@ -339,8 +337,6 @@ if not status:
     mixer.music.pause()
     lose_sound.play()
     time.sleep(5)
-
-
 
 # Exit Stuff
 exit()

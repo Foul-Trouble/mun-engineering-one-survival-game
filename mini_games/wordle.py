@@ -285,7 +285,7 @@ def run(world_size, screen):
 
     turns = 0
     answer = []
-    word_list = ['SKEET', 'SLEEP', 'BUILD', 'MATHS', 'CRAZY', 'EARTH', 'DIRTY', 'CIVIL', 'POWER', 'CABLE']
+    from constants import word_list
     word_num = random.randint(0, len(word_list)-1)
     word = list(word_list[word_num])
     guess = None
