@@ -20,6 +20,7 @@ import mini_games
 
 from assets import *
 
+
 # Testing Stuff
 if __name__ == "__main__":
     None
@@ -335,6 +336,9 @@ while True:
     init()
     while game:
         game, status = loop()
+        points = str(random.randint(0,5))
+        coins_obtained = str(random.randint(0, 5))
+        lcd(points, pygame.time.get_ticks(), coins_obtained)
     if status:
         mixer.music.pause()
         boss_music.play()
@@ -361,6 +365,7 @@ while True:
 
             pygame.display.update()
             clock.tick(60)
+            lcd(points, pygame.time.get_ticks() , coins_obtained)
     if not status:
         loss_start = pygame.time.get_ticks()
         mixer.music.pause()

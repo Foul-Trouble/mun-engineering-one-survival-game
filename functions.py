@@ -3,6 +3,7 @@ from loads import *
 
 from engi1020.arduino.api import *
 from constants import mini_game_called
+import arduino
 
 
 def coin_notification(coin_count, ability_status, time_interval):

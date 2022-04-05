@@ -7,7 +7,7 @@ from loads import newfoundland_coin, fail_img
 from constants import coin_score, mini_game_called
 from constants import world_size, sdx
 from constants import clicked
-
+from arduino import *
 
 class Player:
     # Initialising the player.
@@ -65,7 +65,10 @@ class Player:
         if key[pygame.K_k]:
             self.control_method = 'keyboard'
         elif key[pygame.K_a]:
+
             self.control_method = 'arduino'
+            # else:
+            #     print('Arduino not connected')
         elif key[pygame.K_c]:
             self.control_method = 'controller'
         # Using a keyboard to play
@@ -116,7 +119,11 @@ class Player:
                     if self.walking_direction == -1:
                         self.walking_direction = 0
                         self.hit_box.x += +25
-
+        elif self.control_method == 'arduino':
+            dx += dial()
+            print('Hello')
+            if button():
+                self.vel_y = -15
         # Using the Arduino to play
 
         # handle animation
