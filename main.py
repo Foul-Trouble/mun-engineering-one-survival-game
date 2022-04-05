@@ -343,6 +343,7 @@ while True:
         boss_start_time = pygame.time.get_ticks()
         world = World(blank_level)
         while status and condition:
+            print('Start Boss Battle')
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
@@ -368,6 +369,7 @@ while True:
             pygame.display.update()
             clock.tick(60)
     if not status and condition:
+        print('Loss Start')
         loss_start = pygame.time.get_ticks()
         mixer.music.pause()
         lose_sound.play()

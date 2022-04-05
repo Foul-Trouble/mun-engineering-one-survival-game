@@ -303,13 +303,11 @@ class Enemy:
 
             adrian_y = self.hit_box.y
             player_y = player_hitbox.y
-
+            print(adrian, player, adrian_y, player_y)
             if player > adrian:
-                sdx *= 5
+                dx += 5
             elif player < adrian:
-                sdx = -5
-            else:
-                sdx = 0
+                dx += -5
 
             if player_y > adrian_y:
                 if not self.jumped:
