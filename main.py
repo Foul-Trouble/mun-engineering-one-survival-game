@@ -361,14 +361,14 @@ while True:
                 boss_music.stop()
                 exit
             if loss:
-                status, condition = False, False
+                status, condition = False, True
                 boss_music.stop()
                 break
 
             pygame.display.update()
             clock.tick(60)
     print(status, condition)
-    if not status and not condition:
+    if not status and condition:
         print('Loss Start')
         loss_start = pygame.time.get_ticks()
         mixer.music.pause()
@@ -405,6 +405,39 @@ while True:
                     textRect2.center = (500, 400)
                     screen.blit(help_message, textRect2)
                     if loss_start < pygame.time.get_ticks() - 7000:
+                        redo = Button(500, 600, 'Try Again', 400, 100)
+                        if redo.draw_button(screen):
+                            previous_game_time += pygame.time.get_ticks()
+                            break
+
+            pygame.display.update()
+
+    else:
+        win_start = pygame.time.get_ticks()
+        mixer.music.pause()
+        funny_made = True
+        while True:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+            if win_start > pygame.time.get_ticks() - 3500:
+                screen.fill(color=(255, 255, 255))
+                pygame.display.update()
+            else:
+                screen.fill(color=(0, 0, 0))
+                font = pygame.font.Font('assets/pricedown bl.otf', 120)
+                winner = font.render('YOU SURVIVED', True, (255, 255, 255))
+                textRect = winner.get_rect()
+                textRect.center = (500, 250)
+                screen.blit(winner, textRect)
+                if win_start < pygame.time.get_ticks() - 5000:
+                    font = pygame.font.Font('assets/pricedown bl.otf', 48)
+                    message = font.render("Would you like to play again?", True, (255, 255, 255))
+                    textRect2 = message.get_rect()
+                    textRect2.center = (500, 400)
+                    screen.blit(message, textRect2)
+                    if win_start < pygame.time.get_ticks() - 7000:
                         redo = Button(500, 600, 'Try Again', 400, 100)
                         if redo.draw_button(screen):
                             previous_game_time += pygame.time.get_ticks()
