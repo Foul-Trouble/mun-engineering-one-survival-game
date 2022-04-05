@@ -1,9 +1,12 @@
 # Classes file
 import random
 import pygame
+from pygame.constants import *
+from pygame.locals import *
 from loads import newfoundland_coin, fail_img
 from constants import coin_score, mini_game_called
-from constants import world_size, sd
+from constants import world_size, sdx
+from constants import clicked
 
 
 class Player:
@@ -229,6 +232,7 @@ class Enemy:
         self.images_left = []
         self.index = 0
         self.counter = 0
+        self.counter2 = 0
         # Create the animation of the player moving left and right
         for num in range(2, 4):
             img_right = pygame.image.load(f'assets/Adrian/Adrian {num}.jpeg')
@@ -247,27 +251,47 @@ class Enemy:
         self.jumped = False
         self.direction = 0
 
+        self.hit_box = self.image.get_rect()
+        self.hit_box.x = x + 315
+        self.hit_box.y = y - 5
+        self.hit_box.width = 100
+        self.hit_box.height = 320
+
     def update(self, world, screen, player_hitbox, difficulty):
-        global sd
+        global sdx
         dx = 0
         dy = 0
         walk_cooldown = 5
+        jump_cooldown = 100
+        self.counter += 1
+        self.counter2 += 1
 
         # AI here
         if difficulty == 1:
-            print(self.rect.x)
-            if self.rect.x > 720:
-                sd *= -1
-                print(sd)
-            if self.rect.x < 0:
-                sd *= -1
-            dx = sd
+            print('Hello')
+            # print(self.rect.x)
+            if self.hit_box.right > 1000:
+                sdx *= -1
+            if self.hit_box.left < 0:
+                sdx *= -1
+
+            dx = sdx
         elif difficulty == 2:
-            dx = 4
-            dy = 3
+            if self.hit_box.right > 1000:
+                print(self.hit_box.right)
+                sdx *= -1
+            if self.hit_box.left < 0:
+                print(self.hit_box.left)
+                sdx *= -1
+            dx = sdx
+            if not self.jumped:
+                self.vel_y = -35
+                self.jumped = True
+            if self.counter2 > jump_cooldown:
+                self.jumped = False
+                self.counter2 = 0
         elif difficulty == 3:
             print(player_hitbox)
-
 
         # Find The Nearest Player
 
@@ -291,27 +315,36 @@ class Enemy:
         # check for collision
         for tile in world.tile_list:
             # check for collision in x direction
-            if tile[1].colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
+            if tile[1].colliderect(self.hit_box.x + dx, self.hit_box.y, self.hit_box.width, self.hit_box.height):
                 dx = 0
             # check for collision in y direction
-            if tile[1].colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
+            if tile[1].colliderect(self.hit_box.x, self.hit_box.y + dy, self.hit_box.width, self.hit_box.height):
                 # check if below the ground i.e. jumping
                 if self.vel_y < 0:
-                    dy = tile[1].bottom - self.rect.top
+                    dy = tile[1].bottom - self.hit_box.top
                     self.vel_y = 0
                 # check if above the ground i.e. falling
                 elif self.vel_y >= 0:
-                    dy = tile[1].top - self.rect.bottom
+                    dy = tile[1].top - self.hit_box.bottom
                     self.vel_y = 0
 
         self.rect.x += dx
+        self.hit_box.x += dx
+        if dx > 0:
+            self.direction = 1
+        elif dx < 0:
+            self.direction = -1
+        else:
+            self.direction = 0
         self.rect.y += dy
+        self.hit_box.y += dy
 
-        if self.rect.bottom > world_size[1]:
-            self.rect.bottom = world_size[1]
+        if self.hit_box.bottom > world_size[1]:
+            self.hit_box.bottom = world_size[1]
 
         # draw enemy onto screen
         screen.blit(self.image, self.rect)
+        pygame.draw.rect(screen, (255, 255, 255), self.hit_box, 2)
 
 
 class Coins:
@@ -390,7 +423,8 @@ class Grades:
                 grade_rect.x = grade[0][0]
                 grade_rect.y = grade[0][1]
 
-                if grade_rect.colliderect(player.hit_box.x, player.hit_box.y, player.hit_box.width,player.hit_box.height):
+                if grade_rect.colliderect(player.hit_box.x, player.hit_box.y, player.hit_box.width,
+                                          player.hit_box.height):
                     mini_game_called = True
                 else:
                     grades_copy1.append(grade)
@@ -407,3 +441,69 @@ class Platform:
 
     def __init__(self):
         self.platforms = []
+
+
+class Button:
+    white = (255, 255, 255)
+    black = (0, 0, 0)
+    green = (0, 255, 0)
+    yellow = (255, 255, 0)
+    gray = (128, 128, 128)
+    blue = (0, 0, 255)
+    # colours for button and text
+    button_col = (128, 128, 128)
+    hover_col = (75, 225, 255)
+    click_col = (50, 150, 255)
+    text_col = black
+
+    def __init__(self, x, y, text, width, height):
+        self.x = x
+        self.y = y
+        self.text = text
+        self.height = height
+        self.width = width
+
+    def draw_button(self, screen):
+        white = (255, 255, 255)
+        black = (0, 0, 0)
+        green = (0, 255, 0)
+        yellow = (255, 255, 0)
+        gray = (128, 128, 128)
+        blue = (0, 0, 255)
+
+        action = False
+        global clicked
+
+        # get mouse position
+        pos = pygame.mouse.get_pos()
+
+        # create pygame Rect object for the button
+        button_rect = Rect(self.x, self.y, self.width, self.height)
+
+        # check mouseover and clicked conditions
+        if button_rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1:
+                clicked = True
+                pygame.draw.rect(screen, self.click_col, button_rect)
+            elif pygame.mouse.get_pressed()[0] == 0 and clicked is True:
+                clicked = False
+                action = True
+            else:
+                pygame.draw.rect(screen, self.hover_col, button_rect)
+        else:
+            pygame.draw.rect(screen, self.button_col, button_rect)
+
+        # add shading to button
+        pygame.draw.line(screen, white, (self.x, self.y), (self.x + self.width, self.y), 2)
+        pygame.draw.line(screen, white, (self.x, self.y), (self.x, self.y + self.height), 2)
+        pygame.draw.line(screen, black, (self.x, self.y + self.height), (self.x + self.width, self.y + self.height),
+                         2)
+        pygame.draw.line(screen, black, (self.x + self.width, self.y), (self.x + self.width, self.y + self.height),
+                         2)
+
+        # add text to button
+        font = pygame.font.Font('assets/pricedown bl.otf', 48)
+        text_img = font.render(self.text, True, self.text_col)
+        text_len = text_img.get_width()
+        screen.blit(text_img, (self.x + int(self.width / 2) - int(text_len / 2), self.y))
+        return action

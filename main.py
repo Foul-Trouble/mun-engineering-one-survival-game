@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
 
 def init():
-    global arduino, clock, screen, start_game, start_time, player, teacher, world, character_chosen, coin_count, grade_count
+    global arduino, clock, screen, start_game, start_time, player, teacher, world, character_chosen, coin_count, grade_count, mini_game_time
     pygame.display.set_caption('ENGI Survival')
     screen = pygame.display.set_mode(world_size, 0, 32)
     clock = pygame.time.Clock()
@@ -55,6 +55,7 @@ def init():
             elif event.type == MOUSEBUTTONUP:
                 if not character_chosen == '_____':
                     start_time = pygame.time.get_ticks()
+                    mini_game_time = 0
                     start_game = True
         screen.fill(color=(0, 0, 0))
         font = pygame.font.Font('freesansbold.ttf', int(world_size[0] / 30))
@@ -73,7 +74,6 @@ def init():
 
         pygame.display.update()
     player = Player(-world_size[0] / 3.3, world_size[1] / 1.22, character_chosen, character_hit_loc)
-    teacher = Enemy(650, -200)
     world = World(blank_level)
     coin_count = Coins(newfoundland_coin)
     grade_count = Grades()
@@ -84,7 +84,7 @@ def init():
         except Exception:
             print("Arduino not detected")
             arduino = False
-    teacher = Enemy(400, 590)
+    teacher = Enemy(400, 200)
     grade_summon = Grades()
     mixer.music.play(-1)
     while True:
@@ -119,7 +119,7 @@ def mini_game_check():
         mini_game_start = pygame.time.get_ticks()
         mixer.music.pause()
         startup_sound.play()
-        mini_game_choice = 3
+        mini_game_choice = random.randint(1, 3)
         flash = 2
         while flash > 0:
             screen.fill('black')
@@ -151,10 +151,9 @@ def mini_game_check():
 
 
 def main_game():
-    global world, world_init, mini_game_called, mini_game_time, current_background, levels
+    global world, world_init, mini_game_called, mini_game_time, current_background, levels, previous_game_time
     time_since_enter = pygame.time.get_ticks() - start_time - mini_game_time
     screen.blit(pygame.transform.scale(current_background, world_size), (0, 0))
-
     if time_since_enter < 11300:
         if world_init == 0:
             world_init = 1
@@ -276,7 +275,7 @@ def boss_battle():
     global start_time
     boss_battle_time = pygame.time.get_ticks() - start_time
     screen.blit(pygame.transform.scale(eo_center, world_size), (0, 0))
-    world = World(blank_level)
+
     world.draw(screen)
 
     return status, condition
@@ -303,40 +302,108 @@ def loop():
         status, condition = False, True
     return status, condition
 
+# init()
+# status, condition = True, True
+# boss_start_time = pygame.time.get_ticks()
+# world = World(blank_level)
+# mixer.music.pause()
+# boss_music.play()
+# while True:
+#     for event in pygame.event.get():
+#         if event.type == QUIT:
+#             pygame.quit()
+#             sys.exit()
+#     status, condition = boss_battle()
+#     player.update(world, screen)
+#     if boss_start_time > pygame.time.get_ticks() - 10000:
+#         difficulty = 1
+#     elif boss_start_time > pygame.time.get_ticks() - 25000:
+#         difficulty = 2
+#     elif boss_start_time > pygame.time.get_ticks() - 50000:
+#         difficulty = 3
+#     teacher.update(world, screen, player.hit_box, difficulty)
+#     if boss_start_time < pygame.time.get_ticks() - 50000:
+#         print('You Win!')
+#     pygame.display.update()
+#     clock.tick(60)
 
-init()
-while game:
-    game, status = loop()
-condition = True
-status = True
-if status and condition:
-    mixer.music.pause()
-    boss_music.play()
-    boss_start_time = pygame.time.get_ticks()
-    while status and condition:
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-        status, condition = boss_battle()
-        player.update(world, screen)
-        if boss_start_time > pygame.time.get_ticks() - 10000:
-            difficulty = 1
-        elif boss_start_time > pygame.time.get_ticks() - 25000:
-            difficulty = 2
-        elif boss_start_time > pygame.time.get_ticks() - 50000:
-            difficulty = 3
-        teacher.update(world, screen, player.hit_box, difficulty)
-        if boss_start_time < pygame.time.get_ticks() - 50000:
-            print('You Win!')
-            break
 
-        pygame.display.update()
-        clock.tick(60)
-if not status:
-    mixer.music.pause()
-    lose_sound.play()
-    time.sleep(5)
+
+while True:
+    start_game, game, status, world_init = False, True, True, 0
+    init()
+    while game:
+        game, status = loop()
+    if status:
+        mixer.music.pause()
+        boss_music.play()
+        boss_start_time = pygame.time.get_ticks()
+        world = World(blank_level)
+        condition = True
+        while status and condition:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+            status, condition = boss_battle()
+            player.update(world, screen)
+            if boss_start_time > pygame.time.get_ticks() - 15000:
+                difficulty = 1
+            elif boss_start_time > pygame.time.get_ticks() - 25000:
+                difficulty = 2
+            elif boss_start_time > pygame.time.get_ticks() - 50000:
+                difficulty = 3
+            teacher.update(world, screen, player.hit_box, difficulty)
+            if boss_start_time < pygame.time.get_ticks() - 50000:
+                print('You Win!')
+                break
+
+            pygame.display.update()
+            clock.tick(60)
+    if not status:
+        loss_start = pygame.time.get_ticks()
+        mixer.music.pause()
+        lose_sound.play()
+        funny_made = True
+        while True:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+            if loss_start > pygame.time.get_ticks() - 3500:
+                screen.fill(color=(255, 255, 255))
+                pygame.display.update()
+            else:
+                screen.fill(color=(0, 0, 0))
+                font = pygame.font.Font('assets/pricedown bl.otf', 120)
+                wasted = font.render('WASTED', True, (255, 255, 255))
+                textRect = wasted.get_rect()
+                textRect.center = (500, 250)
+                screen.blit(wasted, textRect)
+                if loss_start < pygame.time.get_ticks() - 5000:
+                    jokes = ['D-Day went too hard',
+                             "Don't you think that's enough Redbull?",
+                             "Get some sleep",
+                             "Fake ID's won't get you that far",
+                             '"One more" was not a good idea'
+                    ]
+                    font = pygame.font.Font('assets/pricedown bl.otf', 48)
+                    if funny_made:
+                        funny = jokes[random.randint(0, 4)]
+                        funny_made = False
+                    help_message = font.render(funny, True, (255, 255, 255))
+                    textRect2 = help_message.get_rect()
+                    textRect2.center = (500, 400)
+                    screen.blit(help_message, textRect2)
+                    if loss_start < pygame.time.get_ticks() - 7000:
+                        redo = Button(500, 600, 'Try Again', 400, 100)
+                        if redo.draw_button(screen):
+                            previous_game_time += pygame.time.get_ticks()
+                            break
+
+
+            pygame.display.update()
+
 
 # Exit Stuff
 exit()

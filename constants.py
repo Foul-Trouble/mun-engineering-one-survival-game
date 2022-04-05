@@ -12,7 +12,9 @@ coin_score = 0
 mini_game_called = False
 mini_game_time = 0
 mini_points = 0
-sd = 3
+sdx = 3
+clicked = False
+previous_game_time = 0
 
 word_list = ['SKEET', 'SLEEP', 'BUILD', 'MATHS', 'CRAZY', 'EARTH', 'DIRTY', 'CIVIL', 'POWER', 'CABLE']
 
