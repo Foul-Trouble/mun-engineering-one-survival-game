@@ -360,7 +360,7 @@ while True:
                 print('You Win!')
                 status, condition = True, True
                 boss_music.stop()
-                exit
+                break
             if loss:
                 status, condition = False, True
                 boss_music.stop()
