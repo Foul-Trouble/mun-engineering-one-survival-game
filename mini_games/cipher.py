@@ -12,6 +12,8 @@ if __name__ == '__main__':
 
 
 def run(size, screen):
+    screen.fill(color=(0,0,0))
+    pygame.display.update()
     global clicked
     game_amount = 0
     white = (255, 255, 255)
@@ -191,7 +193,12 @@ def run(size, screen):
         s_original_word = shift(original_word, inty)
         continue_text = font.render(s_original_word, True, (255, 255, 255))
         textRect = continue_text.get_rect()
-        textRect.center = (500, 100)
+        textRect.center = (500, 120)
+        screen.blit(continue_text, textRect)
+
+        continue_text = font.render(original_word, True, (255, 255, 255))
+        textRect = continue_text.get_rect()
+        textRect.center = (500, 50)
         screen.blit(continue_text, textRect)
 
         guess = keyboard_look(turns)

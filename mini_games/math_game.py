@@ -116,6 +116,7 @@ def run(size, screen):
             ans = int(num1 / num2)
             ans_str = f'{num1} / {num2}'
         if ans > 0 and str(ans)[::-1].find('.') < 5:
+            print(ans)
             break
     guess_count = 0
     while run:
