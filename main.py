@@ -336,12 +336,12 @@ while True:
     init()
     while game:
         game, status = loop()
+    condition = True
     if status:
         mixer.music.pause()
         boss_music.play()
         boss_start_time = pygame.time.get_ticks()
         world = World(blank_level)
-        condition = True
         while status and condition:
             for event in pygame.event.get():
                 if event.type == QUIT:

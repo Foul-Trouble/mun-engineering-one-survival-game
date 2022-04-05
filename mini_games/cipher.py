@@ -5,6 +5,7 @@ import sys
 import string
 import random
 from constants import word_list
+
 if __name__ == '__main__':
     pygame.init()
     screen = pygame.display.set_mode((1000, 720), 0, 32)
@@ -12,7 +13,7 @@ if __name__ == '__main__':
 
 
 def run(size, screen):
-    screen.fill(color=(0,0,0))
+    screen.fill(color=(0, 0, 0))
     pygame.display.update()
     global clicked
     game_amount = 0
@@ -29,6 +30,7 @@ def run(size, screen):
     screen_height = 720
     turn = 0
     font = pygame.font.SysFont('Times New Roman', 30)
+
     class Button():
         # colours for button and text
         button_col = (128, 128, 128)
@@ -80,6 +82,7 @@ def run(size, screen):
             text_len = text_img.get_width()
             screen.blit(text_img, (self.x + int(self.width / 2) - int(text_len / 2), self.y + 15))
             return action
+
     class Guesses():
         def __init__(self, x, y):
             self.x = x
@@ -157,13 +160,12 @@ def run(size, screen):
 
     def random_string():
 
-        x = random.randint(0, len(word_list)-1)
+        x = random.randint(0, len(word_list) - 1)
         return word_list[x]
-
 
     original_word = random_string()
 
-    inty = random.randint(0, 9)
+    inty = random.randint(1, 9)
     print(inty)
 
     # a is 97 and z is 122
@@ -216,7 +218,8 @@ def run(size, screen):
     if turns == 3:
         return False, 0
     else:
-        return True, 1000 - 333*(turns-1)
+        return True, 1000 - 333 * (turns - 1)
+
 
 if __name__ == '__main__':
     run(1000, screen)
