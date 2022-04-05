@@ -239,7 +239,7 @@ def main_game():
         if world_init == 6:
             world_init = 7
             world = World(level_seven)
-            current_background = outside_university_center
+            current_background = engineering_lobby
 
             coin_count.reset()
             grade_count.reset()
@@ -253,7 +253,7 @@ def main_game():
         if world_init == 7:
             world_init = 8
             world = World(level_eight)
-            current_background = outside_engineering
+            current_background = eo_center
 
             coin_count.reset()
             grade_count.reset()
@@ -303,32 +303,6 @@ def loop():
     if time_r >= 101400:
         status, condition = False, True
     return status, condition
-
-
-# init()
-# status, condition = True, True
-# boss_start_time = pygame.time.get_ticks()
-# world = World(blank_level)
-# mixer.music.pause()
-# boss_music.play()
-# while True:
-#     for event in pygame.event.get():
-#         if event.type == QUIT:
-#             pygame.quit()
-#             sys.exit()
-#     status, condition = boss_battle()
-#     player.update(world, screen)
-#     if boss_start_time > pygame.time.get_ticks() - 10000:
-#         difficulty = 1
-#     elif boss_start_time > pygame.time.get_ticks() - 25000:
-#         difficulty = 2
-#     elif boss_start_time > pygame.time.get_ticks() - 50000:
-#         difficulty = 3
-#     teacher.update(world, screen, player.hit_box, difficulty)
-#     if boss_start_time < pygame.time.get_ticks() - 50000:
-#         print('You Win!')
-#     pygame.display.update()
-#     clock.tick(60)
 
 
 while True:
