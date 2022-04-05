@@ -44,7 +44,7 @@ def init():
                 character_hit_loc = 0
             elif key[pygame.K_z]:
                 character_chosen = 'Zach'
-                character_hit_loc = -(world_size[0] / 10)
+                character_hit_loc = -50
             elif key[pygame.K_j]:
                 character_chosen = 'Jenna'
             elif key[pygame.K_a]:
@@ -120,8 +120,8 @@ def mini_game_check():
         mini_game_start = pygame.time.get_ticks()
         mixer.music.pause()
         startup_sound.play()
-        mini_game_choice = random.randint(1, 3)
-        # mini_game_choice = 3
+        # mini_game_choice = random.randint(1, 3)
+        mini_game_choice = 3
         flash = 2
         while flash > 0:
             screen.fill('black')
