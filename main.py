@@ -120,8 +120,8 @@ def mini_game_check():
         mini_game_start = pygame.time.get_ticks()
         mixer.music.pause()
         startup_sound.play()
-        # mini_game_choice = random.randint(1, 3)
-        mini_game_choice = 3
+        mini_game_choice = random.randint(1, 3)
+        #  mini_game_choice = 3
         flash = 2
         while flash > 0:
             screen.fill('black')
@@ -362,8 +362,7 @@ while True:
 
             pygame.display.update()
             clock.tick(60)
-            lcd(points, pygame.time.get_ticks() , coins_obtained)
-    if not status:
+    if not status and condition:
         loss_start = pygame.time.get_ticks()
         mixer.music.pause()
         lose_sound.play()
