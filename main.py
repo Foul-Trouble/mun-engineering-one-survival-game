@@ -358,6 +358,7 @@ while True:
             loss = teacher.update(world, screen, player.hit_box, difficulty)
             if boss_start_time < pygame.time.get_ticks() - 50000:
                 print('You Win!')
+                status, condition = True, True
                 boss_music.stop()
                 exit
             if loss:
