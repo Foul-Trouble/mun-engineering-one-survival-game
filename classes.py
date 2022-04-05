@@ -284,10 +284,8 @@ class Enemy:
             dx = sdx
         elif difficulty == 2:
             if self.hit_box.right > 1000:
-                print(self.hit_box.right)
                 sdx *= -1
             if self.hit_box.left < 0:
-                print(self.hit_box.left)
                 sdx *= -1
             dx = sdx
             if not self.jumped:
@@ -297,19 +295,17 @@ class Enemy:
                 self.jumped = False
                 self.counter2 = 0
         elif difficulty == 3:
-            print(player_hitbox)
-            adrian = self.hit_box.x + self.width/2
-            player = player_hitbox.x + player_hitbox.width/2
+            adrian = self.hit_box.x
+            player = player_hitbox.x
 
             adrian_y = self.hit_box.y
             player_y = player_hitbox.y
-            print(adrian, player, adrian_y, player_y)
             if player > adrian:
-                dx += 5
+                dx += 2
             elif player < adrian:
-                dx += -5
+                dx += -2
 
-            if player_y > adrian_y:
+            if player_y < adrian_y:
                 if not self.jumped:
                     self.vel_y = -20
                     self.jumped = True
