@@ -100,8 +100,8 @@ def run(size, screen):
     looking_for_possible_equation = True
     while looking_for_possible_equation:
         answer_box = []
-        num1 = random.randint(0, 25)
-        num2 = random.randint(0, 50)
+        num1 = random.randint(1, 25)
+        num2 = random.randint(1, 50)
         rand_op = random.randint(0, 3)
         if rand_op == 0:
             ans = num1 + num2

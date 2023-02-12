@@ -235,6 +235,7 @@ def main_game():
                 coin_count.add_coins(coin[0], coin[1])
             for grade in level_six_grades:
                 grade_count.add_grades(grade[0], grade[1], grade[2], grade[3])
+
     elif time_since_enter < 86200:
         if world_init == 6:
             world_init = 7
@@ -262,7 +263,6 @@ def main_game():
                 coin_count.add_coins(coin[0], coin[1])
             for grade in level_eight_grades:
                 grade_count.add_grades(grade[0], grade[1], grade[2], grade[3])
-
 
     else:
         screen.fill(color=(0, 0, 0))
@@ -369,11 +369,19 @@ while True:
                              "Don't you think that's enough Redbull?",
                              "Get some sleep",
                              "Fake ID's won't get you that far",
-                             '"One more" was not a good idea'
+                             '"One more" was not a good idea',
+                             'A bit more studying would have helped',
+                             "You shouldn't have gone out last night",
+                             "K-Fuze is not your friend"
+                             "The Breezeway is not even open yet",
+                             "No more lobby parties",
+                             "Sadly, you'll have to redo the semester",
+                             "Think about dropping that course",
+                             "Talk to Cheryl about your options",
                              ]
                     font = pygame.font.Font('assets/pricedown bl.otf', 48)
                     if funny_made:
-                        funny = jokes[random.randint(0, 4)]
+                        funny = jokes[random.randint(0, 12)]
                         funny_made = False
                     help_message = font.render(funny, True, (255, 255, 255))
                     textRect2 = help_message.get_rect()
